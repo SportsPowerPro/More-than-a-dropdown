@@ -22,7 +22,7 @@ select {
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 16px;
-  height: 45px;  /* Ensure all dropdowns have the same height */
+  height: 45px;
   padding: 10px;
   width: 100%;
 }
@@ -35,11 +35,11 @@ select {
 }
 
 .parts-dropdown {
-  flex: 4;  /* Larger width for the parts dropdown */
+  flex: 4;
 }
 
 .quantity-dropdown {
-  flex: 1;  /* Smaller width for the quantity dropdown */
+  flex: 1;
   text-align: center;
 }
 
