@@ -1,30 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dynamic Dropdown Widget</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-  <div class="container">
-    <h3>Select Model:</h3>
-    <select id="model-dropdown">
-      <option value="" disabled selected>Select your Model Number</option>
-    </select>
+function getFormattedPartsList() {
+  const partsList = document.querySelectorAll("#parts-list .select-row");
+  let formattedParts = [];
 
-    <div id="parts-section" style="display:none;">
-      <h3>Select Part and Quantity:</h3>
-      <div id="parts-list"></div>
-      <div class="add-button-container">
-        <button class="add-button" onclick="addPart()">+ Add Another Part</button>
-      </div>
-    </div>
+  partsList.forEach((row) => {
+    const part = row.querySelector(".parts-dropdown").value;
+    const quantity = row.querySelector(".quantity-dropdown").value;
+    if (part && quantity) {
+      formattedParts.push(`${part}(${quantity})`);
+    }
+  });
 
-    <!-- Hidden fields to send data to JotForm -->
-    <input type="hidden" id="hidden-model" name="model_number">
-    <input type="hidden" id="hidden-parts" name="parts_and_quantities">
-  </div>
+  return formattedParts.join(", ");
+}
 
-  <script src="script.js"></script>
-</body>
-</html>
+function sendDataToJotForm() {
+  const modelDropdown = document.getElementById("model-dropdown");
+  const selectedModel = modelDropdown.value;
+  const formattedPartsList = getFormattedPartsList();
+
+  // Populate hidden fields with data
+  document.getElementById("hidden-model").value = selectedModel;
+  document.getElementById("hidden-parts").value = formattedPartsList;
+
+  // Send data to parent JotForm
+  window.parent.postMessage(
+    {
+      model_number: selectedModel,
+      parts_and_quantities: formattedPartsList,
+    },
+    "*"
+  );
+}
+
+// Call sendDataToJotForm before form submission
+document.querySelector("form").addEventListener("submit", (e) => {
+  e.preventDefault(); // Prevent default to ensure data sends before submission
+  sendDataToJotForm();
+});
