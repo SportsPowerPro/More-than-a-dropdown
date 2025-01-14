@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dynamic Dropdown Widget</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h3>Select Model:</h3>
+    <select id="model-dropdown">
+      <option value="">Select a Model</option>
+      <option value="Model 100">Model 100</option>
+      <option value="Model 200">Model 200</option>
+    </select>
+
+    <div id="parts-section" style="display:none;">
+      <h3>Select Part:</h3>
+      <select id="parts-dropdown"></select>
+    </div>
+
+    <div id="quantity-section" style="display:none;">
+      <h3>Select Quantity:</h3>
+      <select id="quantity-dropdown">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+      </select>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
