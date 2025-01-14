@@ -151,6 +151,15 @@ function validateAndSendDataToJotForm() {
   );
 
   console.log("Form data sent successfully!");
+
+  // Send final submission-complete signal to JotForm
+  window.parent.postMessage(
+    {
+      type: "submission-complete",
+      valid: true
+    },
+    "*"
+  );
 }
 
 // Attach validation to button click
