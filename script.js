@@ -102,9 +102,8 @@ function removePart(button) {
   row.remove();  // Remove the corresponding row
 }
 
-// Handle submit button click
-document.getElementById("submit-button").addEventListener("click", (e) => {
-  e.preventDefault();  // Prevent default behavior
+// Validate and send data to JotForm
+function validateAndSendDataToJotForm() {
   const modelDropdown = document.getElementById("model-dropdown");
   const selectedModel = modelDropdown.value;
 
@@ -136,6 +135,7 @@ document.getElementById("submit-button").addEventListener("click", (e) => {
   document.getElementById("hidden-model").value = selectedModel;
   document.getElementById("hidden-parts").value = formattedParts.join(", ");
 
+  // Send data to JotForm form
   window.parent.postMessage(
     {
       model_number: selectedModel,
@@ -144,5 +144,19 @@ document.getElementById("submit-button").addEventListener("click", (e) => {
     "*"
   );
 
+  // Send a completion message to JotForm
+  window.parent.postMessage(
+    {
+      type: "widget-complete"  // Notify JotForm that widget processing is done
+    },
+    "*"
+  );
+
   alert("Form Submitted Successfully!");
+}
+
+// Attach validation to button click
+document.getElementById("submit-button").addEventListener("click", (e) => {
+  e.preventDefault();  // Prevent default form behavior
+  validateAndSendDataToJotForm();
 });
