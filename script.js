@@ -19,7 +19,7 @@ const modelPartsData = {
 // Populate the model dropdown on page load
 window.onload = function () {
   const modelDropdown = document.getElementById("model-dropdown");
-  modelDropdown.innerHTML = ""; // Clear existing options
+  modelDropdown.innerHTML = "";  // Clear existing options
 
   // Add placeholder text
   const placeholderOption = document.createElement("option");
@@ -47,40 +47,7 @@ function getQuantityOptions() {
   return options;
 }
 
-// Add a new part/quantity row
-function addPart() {
-  const selectedModel = document.getElementById("model-dropdown").value;
-  const selectedParts = modelPartsData[selectedModel] || [];
-
-  if (!selectedModel) {
-    alert("Please select a model before adding parts.");
-    return;
-  }
-
-  const partsList = document.getElementById("parts-list");
-  const newRow = document.createElement("div");
-  newRow.className = "select-row";
-
-  newRow.innerHTML = `
-    <select class="parts-dropdown">
-      <option value="" disabled selected>Select a Part</option>
-      ${selectedParts.map((part) => `<option value="${part}">${part}</option>`).join("")}
-    </select>
-    <select class="quantity-dropdown">
-      ${getQuantityOptions()}
-    </select>
-    <button class="remove-button" onclick="removePart(this)">X</button>
-  `;
-
-  partsList.appendChild(newRow);
-}
-
-// Remove a part/quantity row
-function removePart(button) {
-  button.parentElement.remove();
-}
-
-// Format parts and validate
+// Validate and format parts list
 function getFormattedPartsList() {
   const partsList = document.querySelectorAll("#parts-list .select-row");
   let formattedParts = [];
@@ -91,7 +58,7 @@ function getFormattedPartsList() {
     const quantity = row.querySelector(".quantity-dropdown").value;
 
     if (!part || !quantity) {
-      hasEmptyFields = true;
+      hasEmptyFields = true;  // Track if any fields are empty
     } else {
       formattedParts.push(`${part}(${quantity})`);
     }
@@ -106,39 +73,76 @@ function validateAndSendDataToJotForm() {
   const selectedModel = modelDropdown.value;
 
   if (!selectedModel) {
-    alert("Please select a model.");
-    return;
+    alert("Please select a model number.");
+    return false;
   }
 
   const { formattedParts, hasEmptyFields } = getFormattedPartsList();
 
   if (hasEmptyFields) {
-    alert("Please fill out all fields or remove empty lines.");
-    return;
+    alert("Please fill out all part and quantity fields or remove empty lines.");
+    return false;
   }
 
-  // Populate hidden fields
-  document.getElementById("hidden-model").value = selectedModel;
-  document.getElementById("hidden-parts").value = formattedParts;
+  if (!formattedParts) {
+    alert("Please add at least one part and quantity.");
+    return false;
+  }
+
+  // Populate hidden fields with data using the field IDs assigned by JotForm
+  document.getElementById("input_90").value = selectedModel;  // Hidden field for model_number
+  document.getElementById("input_91").value = formattedParts;  // Hidden field for parts_and_quantities
 
   console.log("Hidden Model Value:", selectedModel);
   console.log("Hidden Parts Value:", formattedParts);
 
-  // Send data to JotForm and complete widget
+  // Send data to parent JotForm
   window.parent.postMessage(
     {
-      type: "widget-complete",
       model_number: selectedModel,
-      parts_and_quantities: formattedParts
+      parts_and_quantities: formattedParts,
     },
     "*"
   );
 
-  console.log("Form data sent successfully!");
+  console.log("Sending completion message to JotForm...");
+  alert("Form data sent successfully!");
+  return true;
 }
 
-// Attach validation to the form submission
-document.getElementById("submit-button").addEventListener("click", (e) => {
-  e.preventDefault(); // Prevent default submission
-  validateAndSendDataToJotForm(); // Send data
+// Add a new part/quantity row
+function addPart() {
+  const selectedModel = document.getElementById("model-dropdown").value;
+  const selectedParts = modelPartsData[selectedModel] || [];
+
+  const partsList = document.getElementById("parts-list");
+  const newRow = document.createElement("div");
+  newRow.className = "select-row";
+
+  newRow.innerHTML = `
+    <select class="parts-dropdown">
+      <option value="" disabled selected>Select a Part</option>
+      ${selectedParts.map((part) => `<option value="${part}">${part}</option>`).join("")}
+    </select>
+    <select class="quantity-dropdown">
+      ${getQuantityOptions()}
+    </select>
+    <button class="remove-button" onclick="removePart(this)">❌</button>
+  `;
+
+  partsList.appendChild(newRow);
+}
+
+// Remove a part/quantity row
+function removePart(button) {
+  const row = button.parentElement;
+  row.remove();  // Remove the corresponding row
+}
+
+// Attach validation to form submission
+document.querySelector("form").addEventListener("submit", (e) => {
+  e.preventDefault();  // Prevent default submission
+  if (validateAndSendDataToJotForm()) {
+    e.target.submit();  // Submit the form if validation passes
+  }
 });
