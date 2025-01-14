@@ -22,6 +22,7 @@ document.getElementById("model-dropdown").addEventListener("change", function ()
           <option value="4">4</option>
           <option value="5">5</option>
         </select>
+        <button class="remove-button" onclick="removePart(this)">❌</button>
       </div>
     `;
     partsSection.style.display = "block";
@@ -49,7 +50,13 @@ function addPart() {
       <option value="4">4</option>
       <option value="5">5</option>
     </select>
+    <button class="remove-button" onclick="removePart(this)">❌</button>
   `;
 
   partsList.appendChild(newRow);  // Add the new row at the end of the list
+}
+
+function removePart(button) {
+  const row = button.parentElement;
+  row.remove();  // Remove the corresponding select-row
 }
