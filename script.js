@@ -139,8 +139,9 @@ function validateAndSendDataToJotForm() {
   console.log("Sending completion message to JotForm...");
   window.parent.postMessage(
     {
-      event: "complete",
-      valid: true,
+      type: "widget-complete",  // JotForm expects this type to know the widget is done
+      event: "complete",        // Additional event key for safety
+      valid: true,              // Indicates data is valid
       data: {
         model_number: selectedModel,
         parts_and_quantities: formattedParts.join(", ")
