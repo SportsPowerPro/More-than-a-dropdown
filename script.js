@@ -135,24 +135,20 @@ function validateAndSendDataToJotForm() {
   document.getElementById("hidden-model").value = selectedModel;
   document.getElementById("hidden-parts").value = formattedParts.join(", ");
 
-  // Send data to JotForm form
+  // Combined postMessage to JotForm (sending data + completion message together)
   window.parent.postMessage(
     {
-      model_number: selectedModel,
-      parts_and_quantities: formattedParts.join(", "),
+      event: "complete",
+      valid: true,
+      data: {
+        model_number: selectedModel,
+        parts_and_quantities: formattedParts.join(", ")
+      }
     },
     "*"
   );
 
-  // Send a completion message to JotForm
-  window.parent.postMessage(
-  {
-    event: "complete",
-    valid: true  // Indicates the widget finished successfully
-  },
-  "*"
-);
-  alert("Form Submitted Successfully!");
+  console.log("Form data sent successfully!");
 }
 
 // Attach validation to button click
