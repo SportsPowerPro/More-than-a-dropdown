@@ -147,11 +147,11 @@ function validateAndSendDataToJotForm() {
   // Send a completion message to JotForm
   window.parent.postMessage(
   {
-    type: "widget-complete"
+    event: "complete",
+    valid: true  // Indicates the widget finished successfully
   },
   "*"
 );
-
   alert("Form Submitted Successfully!");
 }
 
