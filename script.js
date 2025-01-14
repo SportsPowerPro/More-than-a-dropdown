@@ -30,3 +30,26 @@ document.getElementById("model-dropdown").addEventListener("change", function ()
     }
   });
 });
+function addPart() {
+  const partsSection = document.getElementById('parts-section');
+  const newRow = document.createElement('div');
+  newRow.className = 'select-row';
+
+  newRow.innerHTML = `
+    <select>
+      <option value="">Select Part</option>
+      <option value="Part A1">Part A1</option>
+      <option value="Part A2">Part A2</option>
+      <option value="Part A3">Part A3</option>
+    </select>
+    <select>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+    </select>
+  `;
+
+  partsSection.appendChild(newRow);
+}
