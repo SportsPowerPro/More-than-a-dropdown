@@ -3,32 +3,71 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dynamic Dropdown Widget</title>
-  <link rel="stylesheet" href="styles.css">
+  <title>Model and Parts Widget</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .form-container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    label {
+      font-weight: bold;
+      margin-bottom: 8px;
+      display: block;
+    }
+    select, button {
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      width: 100%;
+    }
+    .select-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .quantity-dropdown {
+      width: 80px;
+    }
+    .remove-button {
+      background-color: #ff4d4d;
+      border: none;
+      color: white;
+      cursor: pointer;
+    }
+    .remove-button:hover {
+      background-color: #ff3333;
+    }
+    .submit-button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .submit-button:hover {
+      background-color: #0056b3;
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <h3>Select Model:</h3>
-    <select id="model-dropdown">
-      <option value="" disabled selected>Select your Model Number</option>
-    </select>
+  <div class="form-container">
+    <label for="model-dropdown">Select Model:</label>
+    <select id="model-dropdown"></select>
 
-    <div id="parts-section" style="display:none;">
-      <h3>Select Part and Quantity:</h3>
-      <div id="parts-list"></div>
-      <div class="add-button-container">
-        <button class="add-button" onclick="addPart()">+ Add Another Part</button>
-      </div>
-    </div>
+    <div id="parts-list"></div>
 
-    <!-- Submit button -->
-    <div class="submit-button-container">
-      <button id="submit-button" class="submit-button">Submit</button>
-    </div>
+    <button class="submit-button" onclick="validateAndSendDataToJotForm()">Submit</button>
 
-    <!-- Hidden fields to send data to JotForm -->
+    <!-- Hidden Fields for JotForm -->
     <input type="hidden" id="hidden-model" name="q90_model_number">
-<input type="hidden" id="hidden-parts" name="q91_parts_and_quantities">
+    <input type="hidden" id="hidden-parts" name="q91_parts_and_quantities">
   </div>
 
   <script src="script.js"></script>
