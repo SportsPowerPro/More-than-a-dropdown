@@ -1,3 +1,9 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  padding: 20px;
+}
+
 .container {
   max-width: 500px;
   margin: auto;
@@ -12,24 +18,30 @@ h3 {
   color: #333;
 }
 
+select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+#model-dropdown {
+  width: 100%;  /* Ensures the model dropdown stretches full width */
+  margin-bottom: 20px;
+}
+
 .select-row {
   display: flex;
   gap: 10px;
   margin-bottom: 10px;
 }
 
-.select-row select {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
 #parts-dropdown {
-  width: 70%;  /* Part dropdown stays large */
+  width: 70%;  /* Larger width for the parts dropdown */
 }
 
 #quantity-dropdown {
-  width: 30%;  /* Quantity dropdown is smaller */
+  width: 30%;  /* Smaller width for the quantity dropdown */
 }
 
 .add-button-container {
@@ -44,7 +56,6 @@ h3 {
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  margin-top: 10px;
   text-align: center;
   width: 100%;
 }
