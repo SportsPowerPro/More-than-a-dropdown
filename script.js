@@ -90,8 +90,8 @@ function validateAndSendDataToJotForm() {
   }
 
   // Populate hidden fields with data using the field IDs assigned by JotForm
-  document.getElementById("#input_90").value = selectedModel;  // Hidden field for model_number
-  document.getElementById("#input_91").value = formattedParts;  // Hidden field for parts_and_quantities
+  document.querySelector("#input_90").value = selectedModel;
+document.querySelector("#input_91").value = formattedParts;
 
   console.log("Hidden Model Value:", selectedModel);
   console.log("Hidden Parts Value:", formattedParts);
