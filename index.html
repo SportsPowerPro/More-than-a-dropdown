@@ -26,24 +26,30 @@
       margin-bottom: 10px;
       border: 1px solid #ccc;
       border-radius: 4px;
-      width: 100%;
     }
     .select-row {
       display: flex;
+      align-items: center;
       gap: 10px;
       margin-bottom: 10px;
     }
+    .parts-dropdown {
+      flex: 3;  /* Larger part dropdown */
+      max-width: calc(100% - 20px); 
+    }
     .quantity-dropdown {
-      width: 80px;
+      width: 70px; /* Just wide enough for 3 digits and the arrow */
     }
     .remove-button {
-      background-color: #ff4d4d;
+      background: none;
       border: none;
-      color: white;
+      color: red;
+      font-size: 20px;
       cursor: pointer;
+      padding: 0;
     }
     .remove-button:hover {
-      background-color: #ff3333;
+      color: darkred;
     }
     .add-part-button {
       background-color: #007bff;
@@ -51,16 +57,26 @@
       border: none;
       cursor: pointer;
       width: 100%;
+      padding: 12px;
+      font-weight: bold;
     }
     .add-part-button:hover {
       background-color: #0056b3;
+    }
+    .submit-button {
+      background-color: #6c757d;
+      color: white;
+      width: 100%;
+      padding: 12px;
+      font-weight: bold;
+      border: none;
     }
   </style>
 </head>
 <body>
   <div class="form-container">
     <label for="model-dropdown">Select Model:</label>
-    <select id="model-dropdown"></select>
+    <select id="model-dropdown" class="model-dropdown" style="width: 100%;"></select>
 
     <div id="parts-list"></div>
 
