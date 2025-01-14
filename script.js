@@ -67,6 +67,47 @@ function getFormattedPartsList() {
   return { formattedParts: formattedParts.join(", "), hasEmptyFields };
 }
 
+// Function to set hidden fields with fallback
+function setHiddenFieldsWithFallback(selectedModel, formattedParts) {
+  const maxRetries = 10;  // Number of attempts to find the fields
+  let attempts = 0;
+
+  function trySetFields() {
+    const modelField = document.getElementById("input_90");
+    const partsField = document.getElementById("input_91");
+
+    if (modelField && partsField) {
+      // Fields found, set values
+      console.log("Hidden fields found, setting values...");
+      modelField.value = selectedModel;
+      partsField.value = formattedParts;
+
+      console.log("Model Number:", selectedModel);
+      console.log("Parts and Quantities:", formattedParts);
+      // Send data to parent JotForm
+      window.parent.postMessage(
+        {
+          type: "widget-complete",
+          model_number: selectedModel,
+          parts_and_quantities: formattedParts,
+        },
+        "*"
+      );
+    } else {
+      // Retry if fields are not yet available
+      attempts++;
+      if (attempts < maxRetries) {
+        console.log(`Attempt ${attempts}: Hidden fields not found, retrying...`);
+        setTimeout(trySetFields, 500);  // Retry after 500ms
+      } else {
+        console.error("Hidden fields could not be found after multiple attempts.");
+      }
+    }
+  }
+
+  trySetFields();  // Initial attempt
+}
+
 // Validate and send data to JotForm
 function validateAndSendDataToJotForm() {
   const modelDropdown = document.getElementById("model-dropdown");
@@ -89,24 +130,11 @@ function validateAndSendDataToJotForm() {
     return false;
   }
 
-  // Populate hidden fields with data using the field IDs assigned by JotForm
-  document.querySelector("#input_90").value = selectedModel;
-document.querySelector("#input_91").value = formattedParts;
+  console.log("Form data sent successfully!");
 
-  console.log("Hidden Model Value:", selectedModel);
-  console.log("Hidden Parts Value:", formattedParts);
+  // Call the function with fallback to set values in the hidden fields
+  setHiddenFieldsWithFallback(selectedModel, formattedParts);
 
-  // Send data to parent JotForm
-  window.parent.postMessage(
-    {
-      model_number: selectedModel,
-      parts_and_quantities: formattedParts,
-    },
-    "*"
-  );
-
-  console.log("Sending completion message to JotForm...");
-  alert("Form data sent successfully!");
   return true;
 }
 
