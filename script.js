@@ -12,10 +12,10 @@ document.getElementById("model-dropdown").addEventListener("change", function ()
   if (modelParts[selectedModel]) {
     partsList.innerHTML = `
       <div class="select-row">
-        <select id="parts-dropdown">
+        <select class="parts-dropdown">
           ${modelParts[selectedModel].map((part) => `<option value="${part}">${part}</option>`).join("")}
         </select>
-        <select id="quantity-dropdown">
+        <select class="quantity-dropdown">
           <option value="1">1</option>
           <option value="2">2</option>
           <option value="3">3</option>
@@ -36,13 +36,13 @@ function addPart() {
   newRow.className = "select-row";
 
   newRow.innerHTML = `
-    <select>
+    <select class="parts-dropdown">
       <option value="">Select Part</option>
       <option value="Part A1">Part A1</option>
       <option value="Part A2">Part A2</option>
       <option value="Part A3">Part A3</option>
     </select>
-    <select>
+    <select class="quantity-dropdown">
       <option value="1">1</option>
       <option value="2">2</option>
       <option value="3">3</option>
@@ -51,5 +51,5 @@ function addPart() {
     </select>
   `;
 
-  partsList.appendChild(newRow); // Add new row at the end of the list
+  partsList.appendChild(newRow);  // Add the new row at the end of the list
 }
