@@ -69,7 +69,7 @@ function addPart() {
     <select class="quantity-dropdown">
       ${getQuantityOptions()}
     </select>
-    <button class="remove-button" onclick="removePart(this)">❌</button>
+    <button class="remove-button" onclick="removePart(this)">X</button>
   `;
 
   partsList.appendChild(newRow);
@@ -127,7 +127,7 @@ function validateAndSendDataToJotForm() {
   // Send data to JotForm and complete widget
   window.parent.postMessage(
     {
-      type: "widget-complete", // Notify JotForm that the widget has completed
+      type: "widget-complete",
       model_number: selectedModel,
       parts_and_quantities: formattedParts
     },
