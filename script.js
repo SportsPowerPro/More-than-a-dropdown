@@ -20,6 +20,9 @@ const modelPartsData = {
 window.onload = function () {
   const modelDropdown = document.getElementById("model-dropdown");
 
+  // Clear any default options inside the model dropdown
+  modelDropdown.innerHTML = "";
+
   // Add placeholder text
   const placeholderOption = document.createElement("option");
   placeholderOption.value = "";
