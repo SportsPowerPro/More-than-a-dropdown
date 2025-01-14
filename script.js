@@ -139,6 +139,10 @@ function validateAndSendDataToJotForm() {
   document.getElementById("hidden-model").value = selectedModel;
   document.getElementById("hidden-parts").value = formattedParts.join(", ");
 
+  console.log("Hidden Model Value: ", document.getElementById("hidden-model").value);
+console.log("Hidden Parts Value: ", document.getElementById("hidden-parts").value);
+
+
   console.log("Sending completion message to JotForm...");
   window.parent.postMessage(
     {
