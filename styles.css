@@ -19,31 +19,40 @@ h3 {
 }
 
 select {
-  padding: 0 10px;  /* Horizontal padding only */
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 16px;
-  height: 45px;  /* Fixed height for all dropdowns */
-  line-height: 45px;  /* Ensures text is vertically centered */
-}
-
-#model-dropdown,
-#parts-dropdown {
-  width: 70%;  /* Large width for the model and parts dropdowns */
-}
-
-#quantity-dropdown {
-  width: 30%;  /* Small width for the quantity dropdown */
-  text-align: center;  /* Center-align the text horizontally */
-  display: flex;
-  align-items: center;  /* Center-align the text vertically */
-  justify-content: center;
+  height: 45px;  /* Ensure all dropdowns have the same height */
+  padding: 10px;
+  width: 100%;
 }
 
 .select-row {
   display: flex;
   gap: 10px;
+  align-items: center;
   margin-bottom: 10px;
+}
+
+.parts-dropdown {
+  flex: 4;  /* Larger width for the parts dropdown */
+}
+
+.quantity-dropdown {
+  flex: 1;  /* Smaller width for the quantity dropdown */
+  text-align: center;
+}
+
+.remove-button {
+  background-color: transparent;
+  color: red;
+  font-size: 20px;
+  border: none;
+  cursor: pointer;
+}
+
+.remove-button:hover {
+  color: darkred;
 }
 
 .add-button-container {
