@@ -20,6 +20,14 @@ const modelPartsData = {
 window.onload = function () {
   const modelDropdown = document.getElementById("model-dropdown");
 
+  // Add placeholder text
+  const placeholderOption = document.createElement("option");
+  placeholderOption.value = "";
+  placeholderOption.textContent = "Select your Model Number";
+  placeholderOption.disabled = true;  // Make it unselectable
+  placeholderOption.selected = true;  // Make it selected by default
+  modelDropdown.appendChild(placeholderOption);
+
   // Add all models to the model dropdown
   Object.keys(modelPartsData).forEach((model) => {
     const option = document.createElement("option");
@@ -51,6 +59,7 @@ document.getElementById("model-dropdown").addEventListener("change", function ()
     newRow.className = "select-row";
     newRow.innerHTML = `
       <select class="parts-dropdown">
+        <option value="" disabled selected>Select a Part</option>
         ${selectedParts.map((part) => `<option value="${part}">${part}</option>`).join("")}
       </select>
       <select class="quantity-dropdown">
@@ -74,6 +83,7 @@ function addPart() {
 
   newRow.innerHTML = `
     <select class="parts-dropdown">
+      <option value="" disabled selected>Select a Part</option>
       ${selectedParts.map((part) => `<option value="${part}">${part}</option>`).join("")}
     </select>
     <select class="quantity-dropdown">
