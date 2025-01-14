@@ -1,4 +1,4 @@
-// Models and corresponding parts (global scope)
+// Models and corresponding parts (Complete Data)
 const modelPartsData = {
   "MSC-3782-BM": [
     "A1", "A2", "A3", "A5", "A6", "A7", "B4", "C2",
@@ -52,8 +52,8 @@ function addPart() {
   const selectedModel = document.getElementById("model-dropdown").value;
   const selectedParts = modelPartsData[selectedModel] || [];
 
-  if (selectedParts.length === 0) {
-    alert("Please select a model first to add parts.");
+  if (!selectedModel) {
+    alert("Please select a model before adding parts.");
     return;
   }
 
@@ -80,7 +80,7 @@ function removePart(button) {
   button.parentElement.remove();
 }
 
-// Validate and format parts list
+// Format parts and validate
 function getFormattedPartsList() {
   const partsList = document.querySelectorAll("#parts-list .select-row");
   let formattedParts = [];
@@ -91,7 +91,7 @@ function getFormattedPartsList() {
     const quantity = row.querySelector(".quantity-dropdown").value;
 
     if (!part || !quantity) {
-      hasEmptyFields = true; // Track if any fields are empty
+      hasEmptyFields = true;
     } else {
       formattedParts.push(`${part}(${quantity})`);
     }
@@ -106,58 +106,28 @@ function validateAndSendDataToJotForm() {
   const selectedModel = modelDropdown.value;
 
   if (!selectedModel) {
-    alert("Please select a model number.");
-    return false;
+    alert("Please select a model.");
+    return;
   }
 
   const { formattedParts, hasEmptyFields } = getFormattedPartsList();
 
   if (hasEmptyFields) {
-    alert("Please fill out all part and quantity fields or remove empty lines.");
-    return false;
+    alert("Please fill out all fields or remove empty lines.");
+    return;
   }
 
-  if (!formattedParts) {
-    alert("Please add at least one part and quantity.");
-    return false;
-  }
-
-  // Update hidden fields
   document.getElementById("hidden-model").value = selectedModel;
   document.getElementById("hidden-parts").value = formattedParts;
 
-  console.log("Hidden Model Value:", document.getElementById("hidden-model").value);
-  console.log("Hidden Parts Value:", document.getElementById("hidden-parts").value);
+  console.log("Hidden Model Value:", selectedModel);
+  console.log("Hidden Parts Value:", formattedParts);
 
-  console.log("Sending completion message to JotForm...");
-  window.parent.postMessage(
-    {
-      type: "completion",
-      valid: true,
-      data: {
-        model_number: selectedModel,
-        parts_and_quantities: formattedParts,
-      }
-    },
-    "*"
-  );
+  // Send message to JotForm
+  window.parent.postMessage({
+    type: "completion",
+    data: { model_number: selectedModel, parts_and_quantities: formattedParts }
+  }, "*");
 
   console.log("Form data sent successfully!");
-
-  // Unstick the form by sending submission-complete
-  setTimeout(() => {
-    window.parent.postMessage(
-      {
-        type: "submission-complete",
-        valid: true,
-      },
-      "*"
-    );
-  }, 500);  // 500ms delay to ensure message processes
 }
-
-// Attach form validation to submission
-document.querySelector("form").addEventListener("submit", (e) => {
-  e.preventDefault(); // Prevent default submission
-  validateAndSendDataToJotForm();
-});
