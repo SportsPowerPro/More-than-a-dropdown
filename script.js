@@ -1,4 +1,4 @@
-// Models and corresponding parts (Complete Data)
+// Models and corresponding parts
 const modelPartsData = {
   "MSC-3782-BM": [
     "A1", "A2", "A3", "A5", "A6", "A7", "B4", "C2",
@@ -117,17 +117,28 @@ function validateAndSendDataToJotForm() {
     return;
   }
 
+  // Populate hidden fields
   document.getElementById("hidden-model").value = selectedModel;
   document.getElementById("hidden-parts").value = formattedParts;
 
   console.log("Hidden Model Value:", selectedModel);
   console.log("Hidden Parts Value:", formattedParts);
 
-  // Send message to JotForm
-  window.parent.postMessage({
-    type: "completion",
-    data: { model_number: selectedModel, parts_and_quantities: formattedParts }
-  }, "*");
+  // Send data to JotForm and complete widget
+  window.parent.postMessage(
+    {
+      type: "widget-complete", // Notify JotForm that the widget has completed
+      model_number: selectedModel,
+      parts_and_quantities: formattedParts
+    },
+    "*"
+  );
 
   console.log("Form data sent successfully!");
 }
+
+// Attach validation to the form submission
+document.getElementById("submit-button").addEventListener("click", (e) => {
+  e.preventDefault(); // Prevent default submission
+  validateAndSendDataToJotForm(); // Send data
+});
