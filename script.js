@@ -1,6 +1,6 @@
 document.getElementById("model-dropdown").addEventListener("change", function () {
   const partsSection = document.getElementById("parts-section");
-  const partsDropdown = document.getElementById("parts-dropdown");
+  const partsList = document.getElementById("parts-list");
 
   const modelParts = {
     "Model 100": ["Part A1", "Part A2", "Part A3"],
@@ -10,9 +10,20 @@ document.getElementById("model-dropdown").addEventListener("change", function ()
   const selectedModel = this.value;
 
   if (modelParts[selectedModel]) {
-    partsDropdown.innerHTML = modelParts[selectedModel]
-      .map((part) => `<option value="${part}">${part}</option>`)
-      .join("");
+    partsList.innerHTML = `
+      <div class="select-row">
+        <select id="parts-dropdown">
+          ${modelParts[selectedModel].map((part) => `<option value="${part}">${part}</option>`).join("")}
+        </select>
+        <select id="quantity-dropdown">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+      </div>
+    `;
     partsSection.style.display = "block";
   } else {
     partsSection.style.display = "none";
@@ -40,5 +51,5 @@ function addPart() {
     </select>
   `;
 
-  partsList.appendChild(newRow); // Add new row above the button
+  partsList.appendChild(newRow); // Add new row at the end of the list
 }
