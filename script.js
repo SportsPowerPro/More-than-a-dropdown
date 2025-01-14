@@ -132,16 +132,19 @@ function validateAndSendDataToJotForm() {
     return;
   }
 
+  // Ensure correct field names match JotForm
+  document.getElementById("hidden-model").name = "model_number";
+  document.getElementById("hidden-parts").name = "parts_and_quantities";
+
   document.getElementById("hidden-model").value = selectedModel;
   document.getElementById("hidden-parts").value = formattedParts.join(", ");
 
-  // Combined postMessage to JotForm
   console.log("Sending completion message to JotForm...");
   window.parent.postMessage(
     {
-      type: "widget-complete",  // JotForm expects this type to know the widget is done
-      event: "complete",        // Additional event key for safety
-      valid: true,              // Indicates data is valid
+      type: "widget-complete",
+      event: "complete",
+      valid: true,
       data: {
         model_number: selectedModel,
         parts_and_quantities: formattedParts.join(", ")
@@ -152,7 +155,6 @@ function validateAndSendDataToJotForm() {
 
   console.log("Form data sent successfully!");
 
-  // Send final submission-complete signal to JotForm
   window.parent.postMessage(
     {
       type: "submission-complete",
