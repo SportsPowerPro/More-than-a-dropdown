@@ -10,9 +10,7 @@
   <div class="container">
     <h3>Select Model:</h3>
     <select id="model-dropdown">
-      <option value="">Select a Model</option>
-      <option value="Model 100">Model 100</option>
-      <option value="Model 200">Model 200</option>
+      <option value="" disabled selected>Select your Model Number</option>
     </select>
 
     <div id="parts-section" style="display:none;">
@@ -22,8 +20,14 @@
         <button class="add-button" onclick="addPart()">+ Add Another Part</button>
       </div>
     </div>
+
+    <form onsubmit="handleSubmitForm(); return false;">
+      <input type="hidden" id="hidden-model" name="model_number">
+      <input type="hidden" id="hidden-parts" name="parts_and_quantities">
+      <button type="submit" class="add-button">Submit</button>
+    </form>
   </div>
-  
+
   <script src="script.js"></script>
 </body>
 </html>
