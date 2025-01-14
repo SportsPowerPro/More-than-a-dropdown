@@ -38,6 +38,32 @@ window.onload = function () {
   });
 };
 
+// Show parts and quantities when a model is selected
+document.getElementById("model-dropdown").addEventListener("change", function () {
+  const selectedModel = this.value;
+  const partsList = document.getElementById("parts-list");
+  partsList.innerHTML = "";  // Clear previous rows
+
+  const selectedParts = modelPartsData[selectedModel] || [];
+
+  if (selectedParts.length > 0) {
+    const newRow = document.createElement("div");
+    newRow.className = "select-row";
+    newRow.innerHTML = `
+      <select class="parts-dropdown">
+        <option value="" disabled selected>Select a Part</option>
+        ${selectedParts.map((part) => `<option value="${part}">${part}</option>`).join("")}
+      </select>
+      <select class="quantity-dropdown">
+        ${getQuantityOptions()}
+      </select>
+      <button class="remove-button" onclick="removePart(this)">❌</button>
+    `;
+    partsList.appendChild(newRow);
+    document.getElementById("parts-section").style.display = "block";  // Show parts section
+  }
+});
+
 // Generate quantity options from 1 to 100
 function getQuantityOptions() {
   let options = "";
@@ -46,70 +72,6 @@ function getQuantityOptions() {
   }
   return options;
 }
-
-// Validate and format parts list
-function getFormattedPartsList() {
-  const partsList = document.querySelectorAll("#parts-list .select-row");
-  let formattedParts = [];
-  let hasEmptyFields = false;
-
-  partsList.forEach((row) => {
-    const part = row.querySelector(".parts-dropdown").value;
-    const quantity = row.querySelector(".quantity-dropdown").value;
-
-    if (!part || !quantity) {
-      hasEmptyFields = true;  // Track if any fields are empty
-    } else {
-      formattedParts.push(`${part}(${quantity})`);
-    }
-  });
-
-  return { formattedParts: formattedParts.join(", "), hasEmptyFields };
-}
-
-// Validate and send data to JotForm
-function validateAndSendDataToJotForm() {
-  const modelDropdown = document.getElementById("model-dropdown");
-  const selectedModel = modelDropdown.value;
-
-  if (!selectedModel) {
-    alert("Please select a model number.");
-    return false;
-  }
-
-  const { formattedParts, hasEmptyFields } = getFormattedPartsList();
-
-  if (hasEmptyFields) {
-    alert("Please fill out all part and quantity fields or remove empty lines.");
-    return false;
-  }
-
-  if (!formattedParts) {
-    alert("Please add at least one part and quantity.");
-    return false;
-  }
-
-  // Populate hidden fields with data
-  document.getElementById("hidden-model").value = selectedModel;
-  document.getElementById("hidden-parts").value = formattedParts;
-
-  // Send data to parent JotForm
-  window.parent.postMessage(
-    {
-      model_number: selectedModel,
-      parts_and_quantities: formattedParts,
-    },
-    "*"
-  );
-
-  alert("Form Submitted Successfully!");
-}
-
-// Attach validation to button click
-document.getElementById("submit-button").addEventListener("click", (e) => {
-  e.preventDefault();  // Prevent default form behavior
-  validateAndSendDataToJotForm();
-});
 
 // Add a new part/quantity row
 function addPart() {
@@ -139,3 +101,48 @@ function removePart(button) {
   const row = button.parentElement;
   row.remove();  // Remove the corresponding row
 }
+
+// Handle submit button click
+document.getElementById("submit-button").addEventListener("click", (e) => {
+  e.preventDefault();  // Prevent default behavior
+  const modelDropdown = document.getElementById("model-dropdown");
+  const selectedModel = modelDropdown.value;
+
+  if (!selectedModel) {
+    alert("Please select a model number.");
+    return;
+  }
+
+  const partsList = document.querySelectorAll("#parts-list .select-row");
+  let formattedParts = [];
+
+  partsList.forEach((row) => {
+    const part = row.querySelector(".parts-dropdown").value;
+    const quantity = row.querySelector(".quantity-dropdown").value;
+
+    if (!part || !quantity) {
+      alert("Please fill out all part and quantity fields or remove empty lines.");
+      return;
+    }
+
+    formattedParts.push(`${part}(${quantity})`);
+  });
+
+  if (formattedParts.length === 0) {
+    alert("Please add at least one part and quantity.");
+    return;
+  }
+
+  document.getElementById("hidden-model").value = selectedModel;
+  document.getElementById("hidden-parts").value = formattedParts.join(", ");
+
+  window.parent.postMessage(
+    {
+      model_number: selectedModel,
+      parts_and_quantities: formattedParts.join(", "),
+    },
+    "*"
+  );
+
+  alert("Form Submitted Successfully!");
+});
