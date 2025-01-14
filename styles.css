@@ -19,20 +19,25 @@ h3 {
 }
 
 select {
-  padding: 10px;  /* Same padding for all dropdowns */
+  padding: 0 10px;  /* Horizontal padding only */
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 16px;
-  height: 45px;  /* Fixed height for consistent size */
+  height: 45px;  /* Fixed height for all dropdowns */
+  line-height: 45px;  /* Ensures text is vertically centered */
 }
 
 #model-dropdown,
 #parts-dropdown {
-  width: 70%;  /* Same width for model and parts dropdowns */
+  width: 70%;  /* Large width for the model and parts dropdowns */
 }
 
 #quantity-dropdown {
-  width: 30%;  /* Smaller width for the quantity dropdown */
+  width: 30%;  /* Small width for the quantity dropdown */
+  text-align: center;  /* Center-align the text horizontally */
+  display: flex;
+  align-items: center;  /* Center-align the text vertically */
+  justify-content: center;
 }
 
 .select-row {
