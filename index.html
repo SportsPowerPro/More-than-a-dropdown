@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Model and Parts Widget</title>
+  <title>Model and Parts Selector Widget</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -45,13 +45,14 @@
     .remove-button:hover {
       background-color: #ff3333;
     }
-    .submit-button {
+    .add-part-button {
       background-color: #007bff;
       color: white;
       border: none;
       cursor: pointer;
+      width: 100%;
     }
-    .submit-button:hover {
+    .add-part-button:hover {
       background-color: #0056b3;
     }
   </style>
@@ -63,9 +64,10 @@
 
     <div id="parts-list"></div>
 
+    <button class="add-part-button" onclick="addPart()">+ Add Part</button>
     <button class="submit-button" onclick="validateAndSendDataToJotForm()">Submit</button>
 
-    <!-- Hidden Fields for JotForm -->
+    <!-- Hidden fields for JotForm -->
     <input type="hidden" id="hidden-model" name="q90_model_number">
     <input type="hidden" id="hidden-parts" name="q91_parts_and_quantities">
   </div>
