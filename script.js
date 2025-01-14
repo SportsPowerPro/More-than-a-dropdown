@@ -16,90 +16,46 @@ const modelPartsData = {
   ]
 };
 
-// Populate the model dropdown on page load
-window.onload = function () {
-  const modelDropdown = document.getElementById("model-dropdown");
+// Function to format parts and quantities into "Part(Quantity)" format
+function getFormattedPartsList() {
+  const partsList = document.querySelectorAll("#parts-list .select-row");
+  let formattedParts = [];
 
-  // Clear any default options inside the model dropdown
-  modelDropdown.innerHTML = "";
-
-  // Add placeholder text
-  const placeholderOption = document.createElement("option");
-  placeholderOption.value = "";
-  placeholderOption.textContent = "Select your Model Number";
-  placeholderOption.disabled = true;  // Make it unselectable
-  placeholderOption.selected = true;  // Make it selected by default
-  modelDropdown.appendChild(placeholderOption);
-
-  // Add all models to the model dropdown
-  Object.keys(modelPartsData).forEach((model) => {
-    const option = document.createElement("option");
-    option.value = model;
-    option.textContent = model;
-    modelDropdown.appendChild(option);
+  partsList.forEach((row) => {
+    const part = row.querySelector(".parts-dropdown").value;
+    const quantity = row.querySelector(".quantity-dropdown").value;
+    if (part && quantity) {
+      formattedParts.push(`${part}(${quantity})`);  // Combine part and quantity
+    }
   });
-};
 
-// Generate quantity options from 1 to 100
-function getQuantityOptions() {
-  let options = "";
-  for (let i = 1; i <= 100; i++) {
-    options += `<option value="${i}">${i}</option>`;
+  return formattedParts.join(", ");  // Join all parts into a single string
+}
+
+// Function to handle form submission
+function handleSubmitForm() {
+  const modelDropdown = document.getElementById("model-dropdown");
+  const selectedModel = modelDropdown.value;
+
+  if (!selectedModel) {
+    alert("Please select a model number.");
+    return;
   }
-  return options;
-}
 
-// Handle model selection to show exclusive parts
-document.getElementById("model-dropdown").addEventListener("change", function () {
-  const selectedModel = this.value;
-  const partsList = document.getElementById("parts-list");
-  partsList.innerHTML = "";  // Clear previous rows
+  const formattedPartsList = getFormattedPartsList();
 
-  const selectedParts = modelPartsData[selectedModel] || [];
-
-  if (selectedParts.length > 0) {
-    const newRow = document.createElement("div");
-    newRow.className = "select-row";
-    newRow.innerHTML = `
-      <select class="parts-dropdown">
-        <option value="" disabled selected>Select a Part</option>
-        ${selectedParts.map((part) => `<option value="${part}">${part}</option>`).join("")}
-      </select>
-      <select class="quantity-dropdown">
-        ${getQuantityOptions()}  <!-- 1 to 100 options -->
-      </select>
-      <button class="remove-button" onclick="removePart(this)">❌</button>
-    `;
-    partsList.appendChild(newRow);
-    document.getElementById("parts-section").style.display = "block";
+  if (!formattedPartsList) {
+    alert("Please select at least one part and its quantity.");
+    return;
   }
-});
 
-// Add a new part/quantity row
-function addPart() {
-  const selectedModel = document.getElementById("model-dropdown").value;
-  const selectedParts = modelPartsData[selectedModel] || [];
+  console.log("Model:", selectedModel);
+  console.log("Parts and Quantities:", formattedPartsList);
 
-  const partsList = document.getElementById("parts-list");
-  const newRow = document.createElement("div");
-  newRow.className = "select-row";
+  // Example: Send data to JotForm hidden fields (you can add hidden inputs in your HTML)
+  document.getElementById("hidden-model").value = selectedModel;
+  document.getElementById("hidden-parts").value = formattedPartsList;
 
-  newRow.innerHTML = `
-    <select class="parts-dropdown">
-      <option value="" disabled selected>Select a Part</option>
-      ${selectedParts.map((part) => `<option value="${part}">${part}</option>`).join("")}
-    </select>
-    <select class="quantity-dropdown">
-      ${getQuantityOptions()}  <!-- 1 to 100 options -->
-    </select>
-    <button class="remove-button" onclick="removePart(this)">❌</button>
-  `;
-
-  partsList.appendChild(newRow);  // Add the new row at the end of the list
+  alert("Form Submitted Successfully!");
 }
 
-// Remove a part/quantity row
-function removePart(button) {
-  const row = button.parentElement;
-  row.remove();  // Remove the corresponding select-row
-}
