@@ -144,18 +144,17 @@ console.log("Hidden Parts Value: ", document.getElementById("hidden-parts").valu
 
 
   console.log("Sending completion message to JotForm...");
+ setTimeout(() => {
   window.parent.postMessage(
     {
       type: "widget-complete",
       event: "complete",
       valid: true,
-      data: {
-        model_number: selectedModel,
-        parts_and_quantities: formattedParts.join(", ")
-      }
     },
     "*"
   );
+}, 500);  // 500 milliseconds delay
+
 
   console.log("Form data sent successfully!");
 
