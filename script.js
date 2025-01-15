@@ -16,11 +16,12 @@ const modelPartsData = {
   ]
 };
 
-// Populate the model dropdown
+// Populate the model dropdown on page load
 window.onload = function () {
   const modelDropdown = document.getElementById("model-dropdown");
-  modelDropdown.innerHTML = ""; // Clear existing options
+  modelDropdown.innerHTML = "";  // Clear existing options
 
+  // Add placeholder text
   const placeholderOption = document.createElement("option");
   placeholderOption.value = "";
   placeholderOption.textContent = "Select your Model Number";
@@ -28,6 +29,7 @@ window.onload = function () {
   placeholderOption.selected = true;
   modelDropdown.appendChild(placeholderOption);
 
+  // Add models to the dropdown
   Object.keys(modelPartsData).forEach((model) => {
     const option = document.createElement("option");
     option.value = model;
@@ -36,7 +38,7 @@ window.onload = function () {
   });
 };
 
-// Function to generate quantity options from 1 to 100
+// Generate quantity options from 1 to 100
 function getQuantityOptions() {
   let options = "";
   for (let i = 1; i <= 100; i++) {
@@ -45,7 +47,7 @@ function getQuantityOptions() {
   return options;
 }
 
-// Function to get the formatted parts list
+// Validate and format parts list
 function getFormattedPartsList() {
   const partsList = document.querySelectorAll("#parts-list .select-row");
   let formattedParts = [];
@@ -56,7 +58,7 @@ function getFormattedPartsList() {
     const quantity = row.querySelector(".quantity-dropdown").value;
 
     if (!part || !quantity) {
-      hasEmptyFields = true; // Track if any fields are empty
+      hasEmptyFields = true;  // Track if any fields are empty
     } else {
       formattedParts.push(`${part}(${quantity})`);
     }
@@ -65,7 +67,7 @@ function getFormattedPartsList() {
   return { formattedParts: formattedParts.join(", "), hasEmptyFields };
 }
 
-// Function to send data to JotForm
+// Send data to JotForm
 function sendDataToJotForm() {
   const modelDropdown = document.getElementById("model-dropdown");
   const selectedModel = modelDropdown.value;
@@ -87,62 +89,34 @@ function sendDataToJotForm() {
     return;
   }
 
-  // Populate hidden fields with data
-  const hiddenModelField = document.querySelector("[name='model_number']");
-  const hiddenPartsField = document.querySelector("[name='parts_and_quantities']");
+  console.log("Hidden Model Value:", selectedModel);
+  console.log("Hidden Parts Value:", formattedParts);
 
-  if (hiddenModelField && hiddenPartsField) {
-    hiddenModelField.value = selectedModel;
-    hiddenPartsField.value = formattedParts;
+  // Set the hidden input fields with model and parts
+  const modelField = document.getElementById("input_90");
+  const partsField = document.getElementById("input_91");
 
-    console.log(`Hidden Model Value: ${hiddenModelField.value}`);
-    console.log(`Hidden Parts Value: ${hiddenPartsField.value}`);
+  if (modelField && partsField) {
+    modelField.value = selectedModel;
+    partsField.value = formattedParts;
+  } else {
+    console.error("Hidden fields not found.");
+    return;
   }
 
-  // Send a completion message to JotForm
+  // Notify JotForm the widget is ready
   window.parent.postMessage(
     {
-      type: "widget-complete", // Notify JotForm that the widget process is done
+      type: "widget-complete",
       model_number: selectedModel,
-      parts_and_quantities: formattedParts
+      parts_and_quantities: formattedParts,
     },
     "*"
   );
-
-  console.log("Form data sent successfully!");
 }
 
-// Add a new part/quantity row
-function addPart() {
-  const selectedModel = document.getElementById("model-dropdown").value;
-  const selectedParts = modelPartsData[selectedModel] || [];
-
-  const partsList = document.getElementById("parts-list");
-  const newRow = document.createElement("div");
-  newRow.className = "select-row";
-
-  newRow.innerHTML = `
-    <select class="parts-dropdown">
-      <option value="" disabled selected>Select a Part</option>
-      ${selectedParts.map((part) => `<option value="${part}">${part}</option>`).join("")}
-    </select>
-    <select class="quantity-dropdown">
-      ${getQuantityOptions()}
-    </select>
-    <button class="remove-button" onclick="removePart(this)">❌</button>
-  `;
-
-  partsList.appendChild(newRow);
-}
-
-// Remove a part/quantity row
-function removePart(button) {
-  const row = button.parentElement;
-  row.remove(); // Remove the corresponding row
-}
-
-// Attach event listener to form submission
+// Attach form submission handler
 document.querySelector("form").addEventListener("submit", (e) => {
-  e.preventDefault(); // Prevent default submission
-  sendDataToJotForm(); // Send data on form submission
+  e.preventDefault();  // Prevent default form submission
+  sendDataToJotForm();  // Send data to JotForm
 });
