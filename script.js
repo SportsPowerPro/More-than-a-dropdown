@@ -36,6 +36,9 @@ window.onload = function () {
     option.textContent = model;
     modelDropdown.appendChild(option);
   });
+
+  // Add event listener to update fields whenever inputs change
+  document.getElementById("parts-list").addEventListener("input", updateHiddenFields);
 };
 
 // Function to generate quantity options from 1 to 100
@@ -58,11 +61,12 @@ function addPart() {
   }
 
   const partsList = document.getElementById("parts-list");
+
   const newRow = document.createElement("div");
   newRow.className = "select-row";
 
   newRow.innerHTML = `
-    <select class="parts-dropdown">
+    <select class="parts-dropdown" onchange="validateDuplicatePart(this)">
       <option value="" disabled selected>Select a Part</option>
       ${selectedParts.map((part) => `<option value="${part}">${part}</option>`).join("")}
     </select>
@@ -73,17 +77,37 @@ function addPart() {
   `;
 
   partsList.appendChild(newRow);
-  updateHiddenFields();  // Update hidden fields after adding a new row
+  updateHiddenFields();  // Update fields after adding a part
+}
+
+// Function to validate duplicate part selection
+function validateDuplicatePart(selectElement) {
+  const selectedPart = selectElement.value;
+  const partsList = document.querySelectorAll(".parts-dropdown");
+  let duplicateCount = 0;
+
+  partsList.forEach((dropdown) => {
+    if (dropdown.value === selectedPart) {
+      duplicateCount++;
+    }
+  });
+
+  if (duplicateCount > 1) {
+    alert("This part has already been selected. Please choose a different part.");
+    selectElement.value = "";  // Reset the selection
+  }
+
+  updateHiddenFields();  // Ensure fields are updated
 }
 
 // Function to remove a part/quantity row
 function removePart(button) {
   const row = button.parentElement;
   row.remove();  // Remove the corresponding row
-  updateHiddenFields();  // Update the hidden fields
+  updateHiddenFields();  // Update fields after removing a row
 }
 
-// Function to update the hidden fields for model number and parts
+// Function to update the hidden fields for model number and parts list
 function updateHiddenFields() {
   const selectedModel = document.getElementById("model-dropdown").value;
   const partsList = document.querySelectorAll("#parts-list .select-row");
