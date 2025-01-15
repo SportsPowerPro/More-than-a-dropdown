@@ -10,16 +10,32 @@
   <div class="container">
     <h2>Model/Parts Selector</h2>
     <label for="model-dropdown">Select Model:</label>
-    <select id="model-dropdown"></select>
+    <select id="model-dropdown">
+      <option value="" disabled selected>Select your Model Number</option>
+      <option value="MSC-3782-BM">MSC-3782-BM</option>
+      <option value="MSC-4510">MSC-4510</option>
+    </select>
+
     <div id="parts-list"></div>
+
     <button id="add-part-button" onclick="addPart()">+ Add Part</button>
+
+    <!-- New Parts Summary Section -->
+    <div class="parts-summary-title">Parts Summary</div>
+    <div class="parts-summary-container">
+      <div class="summary-item" id="model-summary">
+        <span id="model_number_display">No model selected</span>
+      </div>
+      <div class="summary-item" id="parts-summary">
+        <span id="parts_and_quantities_display">No parts selected</span>
+      </div>
+    </div>
+
+    <!-- Hidden input fields for JotForm -->
+    <input type="text" id="input_90" name="model_number">
+    <input type="text" id="input_91" name="parts_and_quantities">
+
+    <script src="script.js"></script>
   </div>
-
-<div class="hidden-fields-container">
-  <input type="text" id="input_90" name="model_number" readonly>
-  <input type="text" id="input_91" name="parts_and_quantities" readonly>
-</div>
-
-  <script src="script.js"></script>
 </body>
 </html>
