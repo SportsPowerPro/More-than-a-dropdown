@@ -3,22 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="styles.css">
   <title>Model/Parts Selector</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="container">
-    <h3>Model/Parts Selectorkkk</h3>
+    <h2>Model/Parts Selector</h2>
     <label for="model-dropdown">Select Model:</label>
     <select id="model-dropdown"></select>
-
     <div id="parts-list"></div>
-    <button id="add-part-btn" type="button">+ Add Part</button>
-
-    <!-- Hidden fields to send data to JotForm -->
-    <input type="hidden" id="input_90" name="q90_model_number">
-    <input type="hidden" id="input_91" name="q91_parts_and_quantities">
+    <button id="add-part-button" onclick="addPart()">+ Add Part</button>
   </div>
+
+  <input type="hidden" id="input_90" name="model_number">
+  <input type="hidden" id="input_91" name="parts_and_quantities">
 
   <script src="script.js"></script>
 </body>
