@@ -156,6 +156,7 @@ function updateResults() {
   const selectedModel = document.getElementById("model-dropdown").value;
   document.getElementById("input_90").value = selectedModel || "";
   document.getElementById("input_91").value = formattedParts.join(", ") || "";
+  console.log("submit press")
 }
 
 // Function to update parent form fields when the button is clicked
