@@ -106,14 +106,18 @@ function addPart() {
   }
 
   // Collect all selected parts to filter out from dropdown
-  const selectedPartsList = Array.from(document.querySelectorAll(".parts-dropdown"))
+  const selectedPartsList = Array.from(
+    document.querySelectorAll(".parts-dropdown")
+  )
     .map((dropdown) => dropdown.value)
     .filter((part) => part !== "");
 
   console.log("Selected parts so far:", selectedPartsList);
 
   // Filter the available parts for this model by excluding selected parts
-  const availableParts = selectedParts.filter((part) => !selectedPartsList.includes(part));
+  const availableParts = selectedParts.filter(
+    (part) => !selectedPartsList.includes(part)
+  );
 
   console.log("Available parts for the new dropdown:", availableParts);
 
@@ -124,7 +128,9 @@ function addPart() {
   newRow.innerHTML = `
     <select class="parts-dropdown" onchange="updateResults()">
       <option value="" disabled selected>Select a Part</option>
-      ${availableParts.map((part) => `<option value="${part}">${part}</option>`).join("")}
+      ${availableParts
+        .map((part) => `<option value="${part}">${part}</option>`)
+        .join("")}
     </select>
     <select class="quantity-dropdown" onchange="updateResults()">
       ${getQuantityOptions()}
@@ -160,6 +166,33 @@ function updateResults() {
   document.getElementById("input_90").value = selectedModel || "";
   document.getElementById("input_91").value = formattedParts.join(", ") || "";
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  const updateButton = document.getElementById("update-button");
+
+  if (updateButton) {
+    updateButton.addEventListener("click", () => {
+      console.log("Update button clicked!");
+
+      const selectedModel =
+        document.getElementById("model-dropdown").value || "";
+      const partsRows = document.querySelectorAll("#parts-list .select-row");
+
+      const partsDetails = Array.from(partsRows)
+        .map((row) => {
+          const part = row.querySelector(".parts-dropdown").value || "";
+          const quantity = row.querySelector(".quantity-dropdown").value || "";
+          return part && quantity ? `${part}(${quantity})` : null;
+        })
+        .filter(Boolean);
+
+      console.log("Selected model:", selectedModel);
+      console.log("Parts details:", partsDetails);
+    });
+  } else {
+    console.error("Update button not found!");
+  }
+});
 
 // Function to remove the part/quantity row
 function removePart(button) {
