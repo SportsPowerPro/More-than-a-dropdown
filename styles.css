@@ -77,25 +77,34 @@ button.remove-button:hover {
   color: darkred;
 }
 
-/* Styling for the hidden fields container */
-.hidden-fields-container {
-  display: flex;
-  gap: 10px;
-  margin-top: 15px;
-  justify-content: center;
+/* Styling for the parts summary container */
+.parts-summary-container {
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.hidden-fields-container input {
-  width: 250px;  /* Match input widths */
+.parts-summary-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.parts-summary-container input {
+  width: 100%;
   height: 40px;
   font-size: 16px;
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 5px;
   background-color: #f9f9f9;
+  color: #007bff;  /* Blue text */
+  margin-bottom: 10px;
 }
 
-.hidden-fields-container input[readonly] {
+.parts-summary-container input[readonly] {
   background-color: #e9ecef;
   cursor: not-allowed;
 }
