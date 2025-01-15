@@ -35,8 +35,8 @@ const modelPartsData = {
     "X5-N",
     "X6",
     "Y2",
-    "Hardware A",
-    "Hardware B",
+    "MSC-3782-BM Hardware A",
+    "MSC-3782-BM Hardware B",
   ],
   "MSC-4510": [
     "A1A",
