@@ -16,20 +16,11 @@ const modelPartsData = {
   ]
 };
 
-// Populate the model dropdown on page load
+// Populate the model dropdown
 window.onload = function () {
   const modelDropdown = document.getElementById("model-dropdown");
-  modelDropdown.innerHTML = "";  // Clear existing options
+  modelDropdown.innerHTML = `<option value="" disabled selected>Select your Model Number</option>`;
 
-  // Add placeholder text
-  const placeholderOption = document.createElement("option");
-  placeholderOption.value = "";
-  placeholderOption.textContent = "Select your Model Number";
-  placeholderOption.disabled = true;
-  placeholderOption.selected = true;
-  modelDropdown.appendChild(placeholderOption);
-
-  // Add models to the dropdown
   Object.keys(modelPartsData).forEach((model) => {
     const option = document.createElement("option");
     option.value = model;
@@ -38,7 +29,7 @@ window.onload = function () {
   });
 };
 
-// Generate quantity options from 1 to 100
+// Generate quantity options (1 to 100)
 function getQuantityOptions() {
   let options = "";
   for (let i = 1; i <= 100; i++) {
@@ -47,10 +38,48 @@ function getQuantityOptions() {
   return options;
 }
 
-// Validate and format parts list
-function getFormattedPartsList() {
+// Add new part row
+function addPart() {
+  const selectedModel = document.getElementById("model-dropdown").value;
+  if (!selectedModel) {
+    alert("Please select a model first.");
+    return;
+  }
+
+  const partsList = document.getElementById("parts-list");
+  const partRow = document.createElement("div");
+  partRow.className = "select-row";
+
+  const partsDropdown = modelPartsData[selectedModel].map((part) => `<option value="${part}">${part}</option>`).join("");
+  partRow.innerHTML = `
+    <select class="parts-dropdown">
+      <option value="" disabled selected>Select a Part</option>
+      ${partsDropdown}
+    </select>
+    <select class="quantity-dropdown">${getQuantityOptions()}</select>
+    <button class="remove-button" onclick="removePart(this)">❌</button>
+  `;
+  partsList.appendChild(partRow);
+}
+
+// Remove part row
+function removePart(button) {
+  button.parentElement.remove();
+}
+
+// Handle form submission to JotForm
+document.querySelector("body").addEventListener("submit", (e) => {
+  const modelDropdown = document.getElementById("model-dropdown");
+  const selectedModel = modelDropdown.value;
   const partsList = document.querySelectorAll("#parts-list .select-row");
-  let formattedParts = [];
+
+  if (!selectedModel) {
+    alert("Please select a model.");
+    e.preventDefault();
+    return;
+  }
+
+  const formattedParts = [];
   let hasEmptyFields = false;
 
   partsList.forEach((row) => {
@@ -58,65 +87,22 @@ function getFormattedPartsList() {
     const quantity = row.querySelector(".quantity-dropdown").value;
 
     if (!part || !quantity) {
-      hasEmptyFields = true;  // Track if any fields are empty
+      hasEmptyFields = true;
     } else {
       formattedParts.push(`${part}(${quantity})`);
     }
   });
 
-  return { formattedParts: formattedParts.join(", "), hasEmptyFields };
-}
-
-// Send data to JotForm
-function sendDataToJotForm() {
-  const modelDropdown = document.getElementById("model-dropdown");
-  const selectedModel = modelDropdown.value;
-
-  if (!selectedModel) {
-    alert("Please select a model number.");
-    return;
-  }
-
-  const { formattedParts, hasEmptyFields } = getFormattedPartsList();
-
   if (hasEmptyFields) {
-    alert("Please fill out all part and quantity fields or remove empty lines.");
+    alert("Please fill out all part and quantity fields or remove empty rows.");
+    e.preventDefault();
     return;
   }
 
-  if (!formattedParts) {
-    alert("Please add at least one part and quantity.");
-    return;
-  }
+  document.getElementById("input_90").value = selectedModel;
+  document.getElementById("input_91").value = formattedParts.join(", ");
 
-  console.log("Hidden Model Value:", selectedModel);
-  console.log("Hidden Parts Value:", formattedParts);
-
-  // Set the hidden input fields with model and parts
-  const modelField = document.getElementById("input_90");
-  const partsField = document.getElementById("input_91");
-
-  if (modelField && partsField) {
-    modelField.value = selectedModel;
-    partsField.value = formattedParts;
-  } else {
-    console.error("Hidden fields not found.");
-    return;
-  }
-
-  // Notify JotForm the widget is ready
-  window.parent.postMessage(
-    {
-      type: "widget-complete",
-      model_number: selectedModel,
-      parts_and_quantities: formattedParts,
-    },
-    "*"
-  );
-}
-
-// Attach form submission handler
-document.querySelector("form").addEventListener("submit", (e) => {
-  e.preventDefault();  // Prevent default form submission
-  sendDataToJotForm();  // Send data to JotForm
+  // Send message to JotForm
+  window.parent.postMessage({ type: "widget-complete" }, "*");
 });
+
