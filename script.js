@@ -19,29 +19,16 @@ const modelPartsData = {
 // Populate the model dropdown on page load
 window.onload = function () {
   const modelDropdown = document.getElementById("model-dropdown");
-  modelDropdown.innerHTML = "";  // Clear existing options
 
-  // Add placeholder text
-  const placeholderOption = document.createElement("option");
-  placeholderOption.value = "";
-  placeholderOption.textContent = "Select your Model Number";
-  placeholderOption.disabled = true;
-  placeholderOption.selected = true;
-  modelDropdown.appendChild(placeholderOption);
-
-  // Add models to the dropdown
   Object.keys(modelPartsData).forEach((model) => {
     const option = document.createElement("option");
     option.value = model;
     option.textContent = model;
     modelDropdown.appendChild(option);
   });
-
-  // Add event listener to update fields whenever inputs change
-  document.getElementById("parts-list").addEventListener("input", updateHiddenFields);
 };
 
-// Function to generate quantity options from 1 to 100
+// Generate quantity options from 1 to 100
 function getQuantityOptions() {
   let options = "";
   for (let i = 1; i <= 100; i++) {
@@ -50,23 +37,22 @@ function getQuantityOptions() {
   return options;
 }
 
-// Function to add a new part/quantity row
+// Add a new part/quantity row
 function addPart() {
   const selectedModel = document.getElementById("model-dropdown").value;
   const selectedParts = modelPartsData[selectedModel] || [];
 
   if (!selectedModel) {
-    alert("Please select a model before adding parts.");
+    alert("Please select a model first.");
     return;
   }
 
   const partsList = document.getElementById("parts-list");
-
   const newRow = document.createElement("div");
   newRow.className = "select-row";
 
   newRow.innerHTML = `
-    <select class="parts-dropdown" onchange="validateDuplicatePart(this)">
+    <select class="parts-dropdown">
       <option value="" disabled selected>Select a Part</option>
       ${selectedParts.map((part) => `<option value="${part}">${part}</option>`).join("")}
     </select>
@@ -77,39 +63,18 @@ function addPart() {
   `;
 
   partsList.appendChild(newRow);
-  updateHiddenFields();  // Update fields after adding a part
+  updateResults();
 }
 
-// Function to validate duplicate part selection
-function validateDuplicatePart(selectElement) {
-  const selectedPart = selectElement.value;
-  const partsList = document.querySelectorAll(".parts-dropdown");
-  let duplicateCount = 0;
-
-  partsList.forEach((dropdown) => {
-    if (dropdown.value === selectedPart) {
-      duplicateCount++;
-    }
-  });
-
-  if (duplicateCount > 1) {
-    alert("This part has already been selected. Please choose a different part.");
-    selectElement.value = "";  // Reset the selection
-  }
-
-  updateHiddenFields();  // Ensure fields are updated
-}
-
-// Function to remove a part/quantity row
+// Remove a part/quantity row
 function removePart(button) {
   const row = button.parentElement;
-  row.remove();  // Remove the corresponding row
-  updateHiddenFields();  // Update fields after removing a row
+  row.remove();
+  updateResults();
 }
 
-// Function to update the hidden fields for model number and parts list
-function updateHiddenFields() {
-  const selectedModel = document.getElementById("model-dropdown").value;
+// Update hidden fields and display values
+function updateResults() {
   const partsList = document.querySelectorAll("#parts-list .select-row");
   let formattedParts = [];
 
@@ -122,7 +87,12 @@ function updateHiddenFields() {
     }
   });
 
-  // Populate hidden fields
+  const selectedModel = document.getElementById("model-dropdown").value;
   document.getElementById("input_90").value = selectedModel || "";
   document.getElementById("input_91").value = formattedParts.join(", ") || "";
 }
+
+// Update when model changes
+document.getElementById("model-dropdown").addEventListener("change", () => {
+  updateResults();
+});
