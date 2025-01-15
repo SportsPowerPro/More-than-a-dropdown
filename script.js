@@ -19,13 +19,11 @@ const modelPartsData = {
 // Populate the model dropdown on page load
 window.onload = function () {
   const modelDropdown = document.getElementById("model-dropdown");
-
-  Object.keys(modelPartsData).forEach((model) => {
-    const option = document.createElement("option");
-    option.value = model;
-    option.textContent = model;
-    modelDropdown.appendChild(option);
-  });
+  modelDropdown.innerHTML = `
+    <option value="" disabled selected>Select your Model Number</option>
+    <option value="MSC-3782-BM">MSC-3782-BM</option>
+    <option value="MSC-4510">MSC-4510</option>
+  `;
 };
 
 // Generate quantity options from 1 to 100
@@ -52,11 +50,11 @@ function addPart() {
   newRow.className = "select-row";
 
   newRow.innerHTML = `
-    <select class="parts-dropdown">
+    <select class="parts-dropdown" onchange="updateResults()">
       <option value="" disabled selected>Select a Part</option>
       ${selectedParts.map((part) => `<option value="${part}">${part}</option>`).join("")}
     </select>
-    <select class="quantity-dropdown">
+    <select class="quantity-dropdown" onchange="updateResults()">
       ${getQuantityOptions()}
     </select>
     <button class="remove-button" onclick="removePart(this)">❌</button>
