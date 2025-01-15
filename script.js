@@ -74,6 +74,7 @@ function addPart() {
 function removePart(button) {
   const row = button.parentElement;
   row.remove();  // Remove the corresponding row
+  updateHiddenFields();  // Update fields after removing
 }
 
 // Get formatted parts list
@@ -103,12 +104,12 @@ function updateHiddenFields() {
   document.getElementById("input_91").value = formattedPartsList || "";
 }
 
-// Attach event listeners
-document.getElementById("model-dropdown").addEventListener("change", updateHiddenFields);
-document.getElementById("parts-list").addEventListener("input", updateHiddenFields);
-
-// Add initial addPart button listener
+// Add a single event listener for "Add Part" button once
 document.getElementById("add-part-button").addEventListener("click", () => {
-  addPart();
+  addPart();  // Add only one part row per click
   updateHiddenFields();  // Ensure fields update after adding a part
 });
+
+// Ensure fields update when a part/quantity is changed
+document.getElementById("parts-list").addEventListener("input", updateHiddenFields);
+document.getElementById("model-dropdown").addEventListener("change", updateHiddenFields);
