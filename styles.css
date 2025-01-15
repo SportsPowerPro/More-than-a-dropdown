@@ -1,110 +1,78 @@
-/* General container for styling */
+body {
+  font-family: Arial, sans-serif;
+}
+
 .container {
-  background-color: white;
-  border-radius: 10px;
+  max-width: 600px;
+  margin: auto;
   padding: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 500px;
-  margin: 0 auto;
+  border-radius: 8px;
+  background-color: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.user-entry-container {
+  padding-bottom: 20px;
+}
+
+h2, h3 {
   text-align: center;
 }
 
-/* Title styling */
-h2 {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 20px;
-}
-
-/* Dropdown and button styling */
-select,
-input[type="text"] {
-  width: 100%;
-  height: 40px;
-  font-size: 16px;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+label {
+  display: block;
   margin-bottom: 10px;
-  background-color: #f9f9f9;
 }
 
-button {
+select, input, button {
   width: 100%;
-  height: 40px;
-  font-size: 16px;
-  color: white;
-  background-color: #007bff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-top: 10px;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
 }
 
-button:hover {
-  background-color: #0056b3;
-}
-
-.select-row {
+.parts-summary-container {
   display: flex;
   gap: 10px;
-  align-items: center;
-  margin-bottom: 10px;
+  justify-content: space-between;
 }
 
-/* Styling for dropdowns */
-select.parts-dropdown,
-select.quantity-dropdown {
-  flex: 2;  /* Size ratio for part dropdown */
+.summary-item {
+  flex: 1;
+  background-color: #f9f9f9;
+  padding: 10px;
+  border-radius: 4px;
 }
 
-select.quantity-dropdown {
-  flex: 1;  /* Smaller size for quantity */
-}
-
-/* Remove button styling */
-button.remove-button {
-  flex: 0.5;
-  color: red;
+.summary-fields input {
+  background-color: #f9f9f9;
   font-weight: bold;
-  border: none;
+  color: blue;
+  text-align: center;
+  width: 48%; /* Half width for side-by-side display */
+}
+
+button.remove-button {
+  width: 40px;
   background-color: transparent;
+  border: none;
+  font-size: 18px;
+  color: red;
   cursor: pointer;
-  padding: 0;
 }
 
 button.remove-button:hover {
   color: darkred;
 }
 
-/* Styling for the parts summary container */
-.parts-summary-container {
-  background-color: white;
-  border-radius: 10px;
-  padding: 20px;
-  margin-top: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.parts-summary-title {
-  font-size: 20px;
+button#add-part-button {
+  background-color: #007bff;
+  color: white;
   font-weight: bold;
-  margin-bottom: 10px;
+  cursor: pointer;
 }
 
-.parts-summary-container input {
-  width: 100%;
-  height: 40px;
-  font-size: 16px;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #f9f9f9;
-  color: #007bff;  /* Blue text */
-  margin-bottom: 10px;
-}
-
-.parts-summary-container input[readonly] {
-  background-color: #e9ecef;
-  cursor: not-allowed;
+button#add-part-button:hover {
+  background-color: #0056b3;
 }
