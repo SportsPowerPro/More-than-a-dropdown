@@ -36,26 +36,26 @@ window.onload = function () {
     option.textContent = model;
     modelDropdown.appendChild(option);
   });
-
-  // Add event listener for the Add Part button after page load
-window.onload = function () {
-  const addPartButton = document.getElementById("add-part-button");
-
-  // Remove any existing event listeners before adding a new one
-  addPartButton.replaceWith(addPartButton.cloneNode(true));
-  const newAddPartButton = document.getElementById("add-part-button");
-
-  newAddPartButton.addEventListener("click", (e) => {
-    e.preventDefault();  // Prevent any form submission
-    addPart();  // Call the add part function
-    updateHiddenFields();  // Update hidden fields after adding
-  });
 };
+
+// Function to generate quantity options from 1 to 100
+function getQuantityOptions() {
+  let options = "";
+  for (let i = 1; i <= 100; i++) {
+    options += `<option value="${i}">${i}</option>`;
+  }
+  return options;
+}
 
 // Function to add a new part/quantity row
 function addPart() {
   const selectedModel = document.getElementById("model-dropdown").value;
   const selectedParts = modelPartsData[selectedModel] || [];
+
+  if (!selectedModel) {
+    alert("Please select a model before adding parts.");
+    return;
+  }
 
   const partsList = document.getElementById("parts-list");
   const newRow = document.createElement("div");
@@ -72,35 +72,20 @@ function addPart() {
     <button class="remove-button" onclick="removePart(this)">❌</button>
   `;
 
-  partsList.appendChild(newRow);  // Append a single new row
+  partsList.appendChild(newRow);
+  updateHiddenFields();  // Update hidden fields after adding a new row
 }
 
-// Function to update hidden fields
-function updateHiddenFields() {
-  const selectedModel = document.getElementById("model-dropdown").value;
-  const formattedPartsList = getFormattedPartsList();
-
-  document.getElementById("input_90").value = selectedModel || "";
-  document.getElementById("input_91").value = formattedPartsList || "";
-}
-
-// Function to get quantity options (1 to 100)
-function getQuantityOptions() {
-  let options = "";
-  for (let i = 1; i <= 100; i++) {
-    options += `<option value="${i}">${i}</option>`;
-  }
-  return options;
-}
-
-// Function to remove part row
+// Function to remove a part/quantity row
 function removePart(button) {
   const row = button.parentElement;
-  row.remove();  // Remove the row
-  updateHiddenFields();  // Update the form fields
+  row.remove();  // Remove the corresponding row
+  updateHiddenFields();  // Update the hidden fields
+}
 
-// Get formatted parts list
-function getFormattedPartsList() {
+// Function to update the hidden fields for model number and parts
+function updateHiddenFields() {
+  const selectedModel = document.getElementById("model-dropdown").value;
   const partsList = document.querySelectorAll("#parts-list .select-row");
   let formattedParts = [];
 
@@ -113,15 +98,8 @@ function getFormattedPartsList() {
     }
   });
 
-  return formattedParts.join(", ");
-}
-
-// Function to update hidden fields in real-time
-function updateHiddenFields() {
-  const selectedModel = document.getElementById("model-dropdown").value;
-  const formattedPartsList = getFormattedPartsList();
-
-  // Populate the hidden fields
+  // Populate hidden fields
   document.getElementById("input_90").value = selectedModel || "";
-  document.getElementById("input_91").value = formattedPartsList || "";
+  document.getElementById("input_91").value = formattedParts.join(", ") || "";
 }
+
