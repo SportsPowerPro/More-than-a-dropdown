@@ -1,4 +1,3 @@
-// Full model parts data
 const modelPartsData = {
   "MSC-3782-BM": [
     "A1", "A2", "A3", "A5", "A6", "A7", "B4", "C2",
@@ -16,11 +15,10 @@ const modelPartsData = {
   ]
 };
 
-// Populate the model dropdown
+// Populate the model dropdown on page load
 window.onload = function () {
   const modelDropdown = document.getElementById("model-dropdown");
   modelDropdown.innerHTML = `<option value="" disabled selected>Select your Model Number</option>`;
-
   Object.keys(modelPartsData).forEach((model) => {
     const option = document.createElement("option");
     option.value = model;
@@ -52,7 +50,7 @@ function addPart() {
 
   const partsDropdown = modelPartsData[selectedModel].map((part) => `<option value="${part}">${part}</option>`).join("");
   partRow.innerHTML = `
-    <select class="parts-dropdown">
+    <select class="parts-dropdown" onchange="updatePartDropdowns()">
       <option value="" disabled selected>Select a Part</option>
       ${partsDropdown}
     </select>
@@ -60,11 +58,26 @@ function addPart() {
     <button class="remove-button" onclick="removePart(this)">❌</button>
   `;
   partsList.appendChild(partRow);
+  updatePartDropdowns(); // Update dropdowns after adding
 }
 
 // Remove part row
 function removePart(button) {
   button.parentElement.remove();
+  updatePartDropdowns(); // Update dropdowns after removing
+}
+
+// Update dropdowns to disable selected parts
+function updatePartDropdowns() {
+  const selectedParts = Array.from(document.querySelectorAll(".parts-dropdown")).map((dropdown) => dropdown.value);
+  const partDropdowns = document.querySelectorAll(".parts-dropdown");
+
+  partDropdowns.forEach((dropdown) => {
+    const currentSelection = dropdown.value;
+    dropdown.querySelectorAll("option").forEach((option) => {
+      option.disabled = selectedParts.includes(option.value) && option.value !== currentSelection;
+    });
+  });
 }
 
 // Handle form submission to JotForm
@@ -102,6 +115,6 @@ document.querySelector("body").addEventListener("submit", (e) => {
   document.getElementById("input_90").value = selectedModel;
   document.getElementById("input_91").value = formattedParts.join(", ");
 
-  // Send message to JotForm
+  // Send data to JotForm
   window.parent.postMessage({ type: "widget-complete" }, "*");
 });
