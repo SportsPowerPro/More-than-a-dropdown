@@ -1,4 +1,4 @@
-// Models and corresponding parts
+// Full model parts data
 const modelPartsData = {
   "MSC-3782-BM": [
     "A1", "A2", "A3", "A5", "A6", "A7", "B4", "C2",
@@ -105,4 +105,3 @@ document.querySelector("body").addEventListener("submit", (e) => {
   // Send message to JotForm
   window.parent.postMessage({ type: "widget-complete" }, "*");
 });
-
