@@ -36,6 +36,19 @@ window.onload = function () {
     option.textContent = model;
     modelDropdown.appendChild(option);
   });
+
+  // Add event listener to ensure "Add Part" button is only attached once
+  const addPartButton = document.getElementById("add-part-button");
+  if (!addPartButton.dataset.listenerAdded) {
+    addPartButton.addEventListener("click", () => {
+      addPart();  // Add one part/quantity row
+      updateHiddenFields();  // Update hidden fields
+    });
+    addPartButton.dataset.listenerAdded = "true";  // Mark listener as added
+  }
+
+  // Update hidden fields when model changes
+  modelDropdown.addEventListener("change", updateHiddenFields);
 };
 
 // Generate quantity options from 1 to 100
@@ -74,7 +87,7 @@ function addPart() {
 function removePart(button) {
   const row = button.parentElement;
   row.remove();  // Remove the corresponding row
-  updateHiddenFields();  // Update fields after removing
+  updateHiddenFields();  // Update hidden fields
 }
 
 // Get formatted parts list
@@ -103,13 +116,3 @@ function updateHiddenFields() {
   document.getElementById("input_90").value = selectedModel || "";
   document.getElementById("input_91").value = formattedPartsList || "";
 }
-
-// Add a single event listener for "Add Part" button once
-document.getElementById("add-part-button").addEventListener("click", () => {
-  addPart();  // Add only one part row per click
-  updateHiddenFields();  // Ensure fields update after adding a part
-});
-
-// Ensure fields update when a part/quantity is changed
-document.getElementById("parts-list").addEventListener("input", updateHiddenFields);
-document.getElementById("model-dropdown").addEventListener("change", updateHiddenFields);
