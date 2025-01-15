@@ -102,4 +102,3 @@ function updateHiddenFields() {
   document.getElementById("input_90").value = selectedModel || "";
   document.getElementById("input_91").value = formattedParts.join(", ") || "";
 }
-
