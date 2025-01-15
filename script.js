@@ -118,3 +118,7 @@ document.querySelector("body").addEventListener("submit", (e) => {
   // Send data to JotForm
   window.parent.postMessage({ type: "widget-complete" }, "*");
 });
+
+function formatOutput (){
+ document.getElementById("input_90").value = selectedModel;
+};
