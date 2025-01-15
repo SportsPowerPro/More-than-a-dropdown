@@ -61,6 +61,8 @@ function addPart() {
   updatePartDropdowns(); // Update dropdowns after adding
 const model_number=document.getElementById("input_90");
   model_number.value=document.getElementById("model-dropdown").value;
+  const model_number=document.getElementById("input_91");
+  model_number.value=document.getElementById("parts-and-quantities").value;
 }
 
 // Remove part row
