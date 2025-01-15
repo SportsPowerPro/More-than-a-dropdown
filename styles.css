@@ -25,32 +25,18 @@ label {
 }
 
 select, input, button {
-  width: 100%;
   padding: 10px;
   margin-bottom: 10px;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
 
-.parts-summary-container {
-  display: flex;
-  gap: 10px;
-  justify-content: space-between;
+select.parts-dropdown {
+  width: 70%;
 }
 
-.summary-item {
-  flex: 1;
-  background-color: #f9f9f9;
-  padding: 10px;
-  border-radius: 4px;
-}
-
-.summary-fields input {
-  background-color: #f9f9f9;
-  font-weight: bold;
-  color: blue;
-  text-align: center;
-  width: 48%; /* Half width for side-by-side display */
+select.quantity-dropdown {
+  width: 20%;
 }
 
 button.remove-button {
@@ -71,8 +57,26 @@ button#add-part-button {
   color: white;
   font-weight: bold;
   cursor: pointer;
+  width: 100%;
 }
 
 button#add-part-button:hover {
   background-color: #0056b3;
+}
+
+.results-container {
+  padding-top: 10px;
+}
+
+.summary-fields {
+  display: flex;
+  gap: 10px;
+}
+
+.summary-fields input {
+  background-color: #f9f9f9;
+  font-weight: bold;
+  color: blue;
+  text-align: center;
+  width: 50%;
 }
