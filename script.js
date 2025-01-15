@@ -26,66 +26,19 @@ window.onload = function () {
   `;
 };
 
-// Generate quantity options from 1 to 100
-function getQuantityOptions() {
-  let options = "";
-  for (let i = 1; i <= 100; i++) {
-    options += `<option value="${i}">${i}</option>`;
-  }
-  return options;
-}
-
-// Add a new part/quantity row with validation for duplicates
-function addPart() {
-  const selectedModel = document.getElementById("model-dropdown").value;
-  const selectedParts = modelPartsData[selectedModel] || [];
-
-  if (!selectedModel) {
-    alert("Please select a model first.");
-    return;
-  }
-
-  const partsList = document.querySelectorAll("#parts-list .parts-dropdown");
-  const newRow = document.createElement("div");
-  newRow.className = "select-row";
-
-  // Create the dropdowns and remove button
-  newRow.innerHTML = `
-    <select class="parts-dropdown" onchange="updateResults()">
-      <option value="" disabled selected>Select a Part</option>
-      ${selectedParts.map((part) => `<option value="${part}">${part}</option>`).join("")}
-    </select>
-    <select class="quantity-dropdown" onchange="updateResults()">
-      ${getQuantityOptions()}
-    </select>
-    <button class="remove-button" onclick="removePart(this)">❌</button>
-  `;
-
-  // Add the new row to the parts list
-  document.getElementById("parts-list").appendChild(newRow);
-
-  // Add event listener to prevent duplicate parts
-  const newPartDropdown = newRow.querySelector(".parts-dropdown");
-  newPartDropdown.addEventListener("change", () => {
-    const selectedPart = newPartDropdown.value;
-
-    // Check for duplicates in existing parts
-    let isDuplicate = false;
-    partsList.forEach((existingDropdown) => {
-      if (existingDropdown !== newPartDropdown && existingDropdown.value === selectedPart) {
-        isDuplicate = true;
-      }
-    });
-
-    if (isDuplicate) {
-      alert("This part has already been selected. Please choose a different part.");
-      newPartDropdown.value = "";
-    }
-  });
-
+// Function to generate quantity options from 1 to 100
   updateResults(); // Update the results after adding a new row
 }
 
+// Function to remove the part/quantity row
+function removePart(button) {
+  const row = button.closest(".select-row"); // Find the closest .select-row to the button
+  if (row) {
+    row.remove(); // Remove the row from the DOM
+  }
+
+  updateResults(); // Update results after removal
+}
 
 // Update hidden fields and display values
 function updateResults() {
@@ -106,7 +59,37 @@ function updateResults() {
   document.getElementById("input_91").value = formattedParts.join(", ") || "";
 }
 
-// Update when model changes
+// Function to update parent form fields when the button is clicked
+document.getElementById("update-button").addEventListener("click", () => {
+  const selectedModel = document.getElementById("model-dropdown").value || "";
+  const partsRows = document.querySelectorAll("#parts-list .select-row");
+
+  const partsDetails = Array.from(partsRows)
+    .map((row) => {
+      const part = row.querySelector(".parts-dropdown").value || "";
+      const quantity = row.querySelector(".quantity-dropdown").value || "";
+      return part && quantity ? `${part}(${quantity})` : null;
+    })
+    .filter(Boolean);
+
+  // Update the parent form's hidden fields
+  if (window.parent) {
+    const parentDoc = window.parent.document;
+    const modelInput = parentDoc.querySelector("#input_90");
+    const partsInput = parentDoc.querySelector("#input_91");
+
+    if (modelInput) modelInput.value = selectedModel;
+    if (partsInput) partsInput.value = partsDetails.join(", ");
+
+    alert("Fields updated in the parent form!");
+  }
+});
+
+// Add event listener to update fields when the model selection changes
+document
+  .getElementById("model-dropdown")
+  .addEventListener("change", updateResults);
+
 document.getElementById("model-dropdown").addEventListener("change", () => {
   updateResults();
 });
