@@ -163,13 +163,8 @@ function updateResults() {
   console.log("Selected model:", selectedModel);
   console.log("Formatted parts with quantities:", formattedParts);
 
-  // Update all elements with the same id (input_90 and input_91)
-  const input90s = document.querySelectorAll("#input_90");
-  const input91s = document.querySelectorAll("#input_91");
-
-  // Loop through and update all matching elements
-  input90s.forEach((input) => (input.value = selectedModel || ""));
-  input91s.forEach((input) => (input.value = formattedParts.join(", ") || ""));
+  document.getElementById("input_90").value = selectedModel || "";
+  document.getElementById("input_91").value = formattedParts.join(", ") || "";
 }
 
 document.addEventListener("DOMContentLoaded", () => {
