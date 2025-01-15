@@ -59,6 +59,8 @@ function addPart() {
   `;
   partsList.appendChild(partRow);
   updatePartDropdowns(); // Update dropdowns after adding
+const model_number=document.getElementById("input_90");
+  model_number.value=document.getElementById("model-dropdown").value;
 }
 
 // Remove part row
@@ -120,6 +122,5 @@ document.querySelector("body").addEventListener("submit", (e) => {
 });
 
 function formatOutput (){
- const model_number=document.getElementById("input_90");
-  model_number.value=document.getElementById("model-dropdown").value;
+ 
 };
