@@ -1,80 +1,55 @@
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f9f9f9;
-  padding: 20px;
-}
-
-.container {
+.widget-container {
   max-width: 500px;
-  margin: auto;
-  background-color: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 0 auto;
 }
 
-h3 {
-  margin-bottom: 10px;
-  color: #333;
+label {
+  font-weight: bold;
+  margin-bottom: 8px;
+  display: block;
 }
 
-select {
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 16px;
-  height: 45px;
-  padding: 10px;
+.full-width-dropdown,
+.parts-dropdown,
+.quantity-dropdown {
   width: 100%;
+  padding: 8px;
+  margin-bottom: 12px;
 }
 
 .select-row {
   display: flex;
   gap: 10px;
-  align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .parts-dropdown {
-  flex: 4;
+  flex: 3;  /* Larger size */
 }
 
 .quantity-dropdown {
-  flex: 1;
-  text-align: center;
+  flex: 1;  /* Smaller size for 3 digits */
 }
 
 .remove-button {
-  background-color: transparent;
-  color: red;
-  font-size: 20px;
+  flex: 0.3;
+  background: none;
   border: none;
+  color: red;
+  font-size: 1.5rem;
   cursor: pointer;
 }
 
-.remove-button:hover {
-  color: darkred;
-}
-
-.add-button-container,
-.submit-button-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 10px;
-}
-
-.add-button,
-.submit-button {
+.add-part-button {
+  width: 100%;
+  padding: 10px;
   background-color: #007bff;
   color: white;
-  padding: 10px 20px;
   border: none;
-  border-radius: 5px;
   cursor: pointer;
-  text-align: center;
-  width: 100%;
+  font-size: 1rem;
 }
 
-.add-button:hover,
-.submit-button:hover {
+.add-part-button:hover {
   background-color: #0056b3;
 }
