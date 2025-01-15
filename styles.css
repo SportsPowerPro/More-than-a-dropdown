@@ -4,7 +4,7 @@ body {
 
 .container {
   width: 100%;
-  max-width: 500px;
+  max-width: 600px;
   margin: 0 auto;
   padding: 20px;
   border: 1px solid #ccc;
@@ -22,7 +22,7 @@ label {
   display: block;
 }
 
-select, button {
+select {
   width: 100%;
   padding: 10px;
   margin-bottom: 10px;
@@ -31,18 +31,32 @@ select, button {
   border-radius: 5px;
 }
 
+button#add-part-button {
+  width: 100%;
+  background-color: #007bff;
+  color: white;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 16px;
+}
+
+button#add-part-button:hover {
+  background-color: #0056b3;
+}
+
 .select-row {
   display: flex;
-  gap: 10px;
   align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
 }
 
 .parts-dropdown {
-  flex: 2;
+  flex-grow: 3;
 }
 
 .quantity-dropdown {
-  width: 70px;
+  width: 80px;  /* Just wide enough for 3 digits and a dropdown arrow */
 }
 
 .remove-button {
@@ -51,15 +65,4 @@ select, button {
   cursor: pointer;
   font-size: 20px;
   color: #ff4d4d;
-}
-
-button#add-part-button {
-  background-color: #007bff;
-  color: white;
-  border-radius: 5px;
-  margin-top: 10px;
-}
-
-button#add-part-button:hover {
-  background-color: #0056b3;
 }
