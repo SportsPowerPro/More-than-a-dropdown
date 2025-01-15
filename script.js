@@ -35,7 +35,7 @@ function getQuantityOptions() {
   return options;
 }
 
-// Add a new part/quantity row
+// Add a new part/quantity row with validation for duplicates
 function addPart() {
   const selectedModel = document.getElementById("model-dropdown").value;
   const selectedParts = modelPartsData[selectedModel] || [];
@@ -45,10 +45,11 @@ function addPart() {
     return;
   }
 
-  const partsList = document.getElementById("parts-list");
+  const partsList = document.querySelectorAll("#parts-list .parts-dropdown");
   const newRow = document.createElement("div");
   newRow.className = "select-row";
 
+  // Create the dropdowns and remove button
   newRow.innerHTML = `
     <select class="parts-dropdown" onchange="updateResults()">
       <option value="" disabled selected>Select a Part</option>
@@ -60,16 +61,31 @@ function addPart() {
     <button class="remove-button" onclick="removePart(this)">❌</button>
   `;
 
-  partsList.appendChild(newRow);
-  updateResults();
+  // Add the new row to the parts list
+  document.getElementById("parts-list").appendChild(newRow);
+
+  // Add event listener to prevent duplicate parts
+  const newPartDropdown = newRow.querySelector(".parts-dropdown");
+  newPartDropdown.addEventListener("change", () => {
+    const selectedPart = newPartDropdown.value;
+
+    // Check for duplicates in existing parts
+    let isDuplicate = false;
+    partsList.forEach((existingDropdown) => {
+      if (existingDropdown !== newPartDropdown && existingDropdown.value === selectedPart) {
+        isDuplicate = true;
+      }
+    });
+
+    if (isDuplicate) {
+      alert("This part has already been selected. Please choose a different part.");
+      newPartDropdown.value = "";
+    }
+  });
+
+  updateResults(); // Update the results after adding a new row
 }
 
-// Remove a part/quantity row
-function removePart(button) {
-  const row = button.parentElement;
-  row.remove();
-  updateResults();
-}
 
 // Update hidden fields and display values
 function updateResults() {
