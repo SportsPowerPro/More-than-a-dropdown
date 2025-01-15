@@ -37,30 +37,22 @@ window.onload = function () {
     modelDropdown.appendChild(option);
   });
 
-  // Add event listener to ensure "Add Part" button is only attached once
+  // Add event listener for the Add Part button after page load
+window.onload = function () {
   const addPartButton = document.getElementById("add-part-button");
-  if (!addPartButton.dataset.listenerAdded) {
-    addPartButton.addEventListener("click", () => {
-      addPart();  // Add one part/quantity row
-      updateHiddenFields();  // Update hidden fields
-    });
-    addPartButton.dataset.listenerAdded = "true";  // Mark listener as added
-  }
 
-  // Update hidden fields when model changes
-  modelDropdown.addEventListener("change", updateHiddenFields);
+  // Remove any existing event listeners before adding a new one
+  addPartButton.replaceWith(addPartButton.cloneNode(true));
+  const newAddPartButton = document.getElementById("add-part-button");
+
+  newAddPartButton.addEventListener("click", (e) => {
+    e.preventDefault();  // Prevent any form submission
+    addPart();  // Call the add part function
+    updateHiddenFields();  // Update hidden fields after adding
+  });
 };
 
-// Generate quantity options from 1 to 100
-function getQuantityOptions() {
-  let options = "";
-  for (let i = 1; i <= 100; i++) {
-    options += `<option value="${i}">${i}</option>`;
-  }
-  return options;
-}
-
-// Add a new part/quantity row
+// Function to add a new part/quantity row
 function addPart() {
   const selectedModel = document.getElementById("model-dropdown").value;
   const selectedParts = modelPartsData[selectedModel] || [];
@@ -80,15 +72,32 @@ function addPart() {
     <button class="remove-button" onclick="removePart(this)">❌</button>
   `;
 
-  partsList.appendChild(newRow);
+  partsList.appendChild(newRow);  // Append a single new row
 }
 
-// Remove a part/quantity row
+// Function to update hidden fields
+function updateHiddenFields() {
+  const selectedModel = document.getElementById("model-dropdown").value;
+  const formattedPartsList = getFormattedPartsList();
+
+  document.getElementById("input_90").value = selectedModel || "";
+  document.getElementById("input_91").value = formattedPartsList || "";
+}
+
+// Function to get quantity options (1 to 100)
+function getQuantityOptions() {
+  let options = "";
+  for (let i = 1; i <= 100; i++) {
+    options += `<option value="${i}">${i}</option>`;
+  }
+  return options;
+}
+
+// Function to remove part row
 function removePart(button) {
   const row = button.parentElement;
-  row.remove();  // Remove the corresponding row
-  updateHiddenFields();  // Update hidden fields
-}
+  row.remove();  // Remove the row
+  updateHiddenFields();  // Update the form fields
 
 // Get formatted parts list
 function getFormattedPartsList() {
