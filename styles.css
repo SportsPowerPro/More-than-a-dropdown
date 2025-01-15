@@ -85,3 +85,9 @@ button#add-part-button:hover {
   text-align: center;
   width: 50%;
 }
+
+#update-button {
+background-color: indianred;
+    width: 100%;
+    font-weight: 700;
+}
