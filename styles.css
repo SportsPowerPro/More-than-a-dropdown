@@ -89,9 +89,10 @@ button#add-part-button:hover {
 #update-button {
 background-color: indianred;
     width: 100%;
-    font-weight: 700;
+    font-weight: bold;
   cursor: pointer;
   
 }
-#update-button :hover{backgound-color: #a34949
+#update-button :hover {
+backgound-color: #a34949;
 }
