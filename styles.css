@@ -93,6 +93,6 @@ background-color: indianred;
   cursor: pointer;
   
 }
-#update-button :hover {
-backgound-color: #0056b3;
+button#update-button :hover {
+backgound-color: #db6060;
 }
