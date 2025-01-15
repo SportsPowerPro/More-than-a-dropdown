@@ -105,38 +105,38 @@ function addPart() {
     return;
   }
 
-  const partsList = document.querySelectorAll("#parts-list .parts-dropdown");
+  // Collect all selected parts to filter out from dropdown
+  const selectedPartsList = Array.from(document.querySelectorAll(".parts-dropdown"))
+    .map((dropdown) => dropdown.value)
+    .filter((part) => part !== "");
+
+  console.log("Selected parts so far:", selectedPartsList);
+
+  // Filter the available parts for this model by excluding selected parts
+  const availableParts = selectedParts.filter((part) => !selectedPartsList.includes(part));
+
+  console.log("Available parts for the new dropdown:", availableParts);
+
   const newRow = document.createElement("div");
   newRow.className = "select-row";
 
   // Create the dropdowns and remove button
   newRow.innerHTML = `
-      <select class="parts-dropdown" onchange="updateResults()">
-        <option value="" disabled selected>Select a Part</option>
-        ${selectedParts
-          .map((part) => `<option value="${part}">${part}</option>`)
-          .join("")}
-      </select>
-      <select class="quantity-dropdown" onchange="updateResults()">
-        ${getQuantityOptions()}
-      </select>
-      <button class="remove-button" onclick="removePart(this)">❌</button>
-    `;
+    <select class="parts-dropdown" onchange="updateResults()">
+      <option value="" disabled selected>Select a Part</option>
+      ${availableParts.map((part) => `<option value="${part}">${part}</option>`).join("")}
+    </select>
+    <select class="quantity-dropdown" onchange="updateResults()">
+      ${getQuantityOptions()}
+    </select>
+    <button class="remove-button" onclick="removePart(this)">❌</button>
+  `;
 
   // Add the new row to the parts list
   document.getElementById("parts-list").appendChild(newRow);
 
+  console.log("Added new row to parts list.");
   updateResults(); // Update the results after adding a new row
-}
-
-// Function to remove the part/quantity row
-function removePart(button) {
-  const row = button.closest(".select-row"); // Find the closest .select-row to the button
-  if (row) {
-    row.remove(); // Remove the row from the DOM
-  }
-
-  updateResults(); // Update results after removal
 }
 
 // Update hidden fields and display values
@@ -154,38 +154,20 @@ function updateResults() {
   });
 
   const selectedModel = document.getElementById("model-dropdown").value;
+  console.log("Selected model:", selectedModel);
+  console.log("Formatted parts with quantities:", formattedParts);
+
   document.getElementById("input_90").value = selectedModel || "";
   document.getElementById("input_91").value = formattedParts.join(", ") || "";
-  console.log("submit press")
 }
 
-// Function to update parent form fields when the button is clicked
-document.getElementById("update-button").addEventListener("click", () => {
-  const selectedModel = document.getElementById("model-dropdown").value || "";
-  const partsRows = document.querySelectorAll("#parts-list .select-row");
-
-  const partsDetails = Array.from(partsRows)
-    .map((row) => {
-      const part = row.querySelector(".parts-dropdown").value || "";
-      const quantity = row.querySelector(".quantity-dropdown").value || "";
-      return part && quantity ? `${part}(${quantity})` : null;
-    })
-    .filter(Boolean);
-
-  // Update the parent form's hidden fields
-  if (window.parent) {
-    const parentDoc = window.parent.document;
-    const modelInput = parentDoc.querySelector("#input_90");
-    const partsInput = parentDoc.querySelector("#input_91");
-
-    if (modelInput) modelInput.value = selectedModel;
-    if (partsInput) partsInput.value = partsDetails.join(", ");
-
-    alert("Fields updated in the parent form!");
+// Function to remove the part/quantity row
+function removePart(button) {
+  const row = button.closest(".select-row"); // Find the closest .select-row to the button
+  if (row) {
+    row.remove(); // Remove the row from the DOM
+    console.log("Removed a row from the parts list.");
   }
-});
 
-// Add event listener to update fields when the model selection changes
-document
-  .getElementById("model-dropdown")
-  .addEventListener("change", updateResults);
+  updateResults(); // Update results after removal
+}
