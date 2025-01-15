@@ -1,68 +1,101 @@
-body {
-  font-family: Arial, sans-serif;
-}
-
+/* General container for styling */
 .container {
-  width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 20px;
-  border: 1px solid #ccc;
+  background-color: white;
   border-radius: 10px;
-  background-color: #f9f9f9;
-}
-
-h2 {
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 500px;
+  margin: 0 auto;
   text-align: center;
 }
 
-label {
+/* Title styling */
+h2 {
+  font-size: 24px;
   font-weight: bold;
-  margin-bottom: 10px;
-  display: block;
+  margin-bottom: 20px;
 }
 
-select {
+/* Dropdown and button styling */
+select,
+input[type="text"] {
   width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
+  height: 40px;
   font-size: 16px;
+  padding: 8px;
   border: 1px solid #ccc;
   border-radius: 5px;
+  margin-bottom: 10px;
+  background-color: #f9f9f9;
 }
 
-button#add-part-button {
+button {
   width: 100%;
-  background-color: #007bff;
-  color: white;
-  border-radius: 5px;
-  padding: 10px;
+  height: 40px;
   font-size: 16px;
+  color: white;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
 }
 
-button#add-part-button:hover {
+button:hover {
   background-color: #0056b3;
 }
 
 .select-row {
   display: flex;
-  align-items: center;
   gap: 10px;
+  align-items: center;
   margin-bottom: 10px;
 }
 
-.parts-dropdown {
-  flex-grow: 3;
+/* Styling for dropdowns */
+select.parts-dropdown,
+select.quantity-dropdown {
+  flex: 2;  /* Size ratio for part dropdown */
 }
 
-.quantity-dropdown {
-  width: 80px;  /* Just wide enough for 3 digits and a dropdown arrow */
+select.quantity-dropdown {
+  flex: 1;  /* Smaller size for quantity */
 }
 
-.remove-button {
+/* Remove button styling */
+button.remove-button {
+  flex: 0.5;
+  color: red;
+  font-weight: bold;
   border: none;
-  background: none;
+  background-color: transparent;
   cursor: pointer;
-  font-size: 20px;
-  color: #ff4d4d;
+  padding: 0;
+}
+
+button.remove-button:hover {
+  color: darkred;
+}
+
+/* Styling for the hidden fields container */
+.hidden-fields-container {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+  justify-content: center;
+}
+
+.hidden-fields-container input {
+  width: 250px;  /* Match input widths */
+  height: 40px;
+  font-size: 16px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.hidden-fields-container input[readonly] {
+  background-color: #e9ecef;
+  cursor: not-allowed;
 }
