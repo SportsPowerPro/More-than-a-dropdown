@@ -19,7 +19,7 @@ const modelPartsData = {
 // Populate the model dropdown on page load
 window.onload = function () {
   const modelDropdown = document.getElementById("model-dropdown");
-  modelDropdown.innerHTML = "";  // Clear existing options
+  modelDropdown.innerHTML = ""; // Clear existing options
 
   // Add placeholder text
   const placeholderOption = document.createElement("option");
@@ -47,63 +47,49 @@ function getQuantityOptions() {
   return options;
 }
 
-// Validate and format parts list
-function getFormattedPartsList() {
+// Send data to JotForm
+function sendDataToJotForm() {
+  const modelDropdown = document.getElementById("model-dropdown");
+  const selectedModel = modelDropdown.value;
   const partsList = document.querySelectorAll("#parts-list .select-row");
-  let formattedParts = [];
-  let hasEmptyFields = false;
 
+  let formattedParts = [];
   partsList.forEach((row) => {
     const part = row.querySelector(".parts-dropdown").value;
     const quantity = row.querySelector(".quantity-dropdown").value;
-
-    if (!part || !quantity) {
-      hasEmptyFields = true;  // Track if any fields are empty
-    } else {
+    if (part && quantity) {
       formattedParts.push(`${part}(${quantity})`);
     }
   });
-
-  return { formattedParts: formattedParts.join(", "), hasEmptyFields };
-}
-
-// Validate and send data to JotForm
-function validateAndSendDataToJotForm() {
-  const modelDropdown = document.getElementById("model-dropdown");
-  const selectedModel = modelDropdown.value;
 
   if (!selectedModel) {
     alert("Please select a model number.");
     return false;
   }
 
-  const { formattedParts, hasEmptyFields } = getFormattedPartsList();
-
-  if (hasEmptyFields) {
-    alert("Please fill out all part and quantity fields or remove empty lines.");
-    return false;
-  }
-
-  if (!formattedParts) {
+  if (formattedParts.length === 0) {
     alert("Please add at least one part and quantity.");
     return false;
   }
 
-  // Populate hidden fields with data
-  const modelField = document.querySelector("#input_90") || document.querySelector("#hidden-model");
-  const partsField = document.querySelector("#input_91") || document.querySelector("#hidden-parts");
-  if (modelField && partsField) {
-    modelField.value = selectedModel;
-    partsField.value = formattedParts;
+  // Assign values to hidden fields with exact IDs
+  const hiddenModelField = document.querySelector("#input_90");
+  const hiddenPartsField = document.querySelector("#input_91");
+
+  if (hiddenModelField && hiddenPartsField) {
+    hiddenModelField.value = selectedModel;
+    hiddenPartsField.value = formattedParts.join(", ");
+    console.log("Hidden fields populated.");
   } else {
-    console.error("Hidden fields not found in JotForm.");
+    console.error("Hidden fields not found.");
   }
 
-  // Send data to parent JotForm
+  // Send completion message to JotForm
   window.parent.postMessage(
     {
+      type: "widget-complete",
       model_number: selectedModel,
-      parts_and_quantities: formattedParts,
+      parts_and_quantities: formattedParts.join(", ")
     },
     "*"
   );
@@ -138,20 +124,13 @@ function addPart() {
 // Remove a part/quantity row
 function removePart(button) {
   const row = button.parentElement;
-  row.remove();  // Remove the corresponding row
+  row.remove();
 }
 
-// Ensure script only runs after DOM has loaded
-document.addEventListener("DOMContentLoaded", function () {
-  const form = document.querySelector("form");
-  if (form) {
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();  // Prevent default submission
-      if (validateAndSendDataToJotForm()) {
-        e.target.submit();  // Submit the form if validation passes
-      }
-    });
-  } else {
-    console.error("Form element not found!");
+// Attach form submit listener
+document.querySelector("form").addEventListener("submit", (e) => {
+  e.preventDefault(); // Prevent default submission
+  if (sendDataToJotForm()) {
+    e.target.submit(); // Submit if all fields are valid
   }
 });
