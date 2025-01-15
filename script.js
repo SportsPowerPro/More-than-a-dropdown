@@ -35,8 +35,8 @@ const modelPartsData = {
     "X5-N",
     "X6",
     "Y2",
-    "MSC-3782-BM Hardware A",
-    "MSC-3782-BM Hardware B",
+    "Hardware A",
+    "Hardware B",
   ],
   "MSC-4510": [
     "A1A",
@@ -163,8 +163,13 @@ function updateResults() {
   console.log("Selected model:", selectedModel);
   console.log("Formatted parts with quantities:", formattedParts);
 
-  document.getElementById("input_90").value = selectedModel || "";
-  document.getElementById("input_91").value = formattedParts.join(", ") || "";
+  // Update all elements with the same id (input_90 and input_91)
+  const input90s = document.querySelectorAll("#input_90");
+  const input91s = document.querySelectorAll("#input_91");
+
+  // Loop through and update all matching elements
+  input90s.forEach((input) => (input.value = selectedModel || ""));
+  input91s.forEach((input) => (input.value = formattedParts.join(", ") || ""));
 }
 
 document.addEventListener("DOMContentLoaded", () => {
