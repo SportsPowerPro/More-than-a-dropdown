@@ -16,12 +16,11 @@ const modelPartsData = {
   ]
 };
 
-// Populate the model dropdown on page load
+// Populate the model dropdown
 window.onload = function () {
   const modelDropdown = document.getElementById("model-dropdown");
   modelDropdown.innerHTML = ""; // Clear existing options
 
-  // Add placeholder text
   const placeholderOption = document.createElement("option");
   placeholderOption.value = "";
   placeholderOption.textContent = "Select your Model Number";
@@ -29,7 +28,6 @@ window.onload = function () {
   placeholderOption.selected = true;
   modelDropdown.appendChild(placeholderOption);
 
-  // Add models to the dropdown
   Object.keys(modelPartsData).forEach((model) => {
     const option = document.createElement("option");
     option.value = model;
@@ -38,7 +36,7 @@ window.onload = function () {
   });
 };
 
-// Generate quantity options from 1 to 100
+// Function to generate quantity options from 1 to 100
 function getQuantityOptions() {
   let options = "";
   for (let i = 1; i <= 100; i++) {
@@ -47,55 +45,71 @@ function getQuantityOptions() {
   return options;
 }
 
-// Send data to JotForm
-function sendDataToJotForm() {
-  const modelDropdown = document.getElementById("model-dropdown");
-  const selectedModel = modelDropdown.value;
+// Function to get the formatted parts list
+function getFormattedPartsList() {
   const partsList = document.querySelectorAll("#parts-list .select-row");
-
   let formattedParts = [];
+  let hasEmptyFields = false;
+
   partsList.forEach((row) => {
     const part = row.querySelector(".parts-dropdown").value;
     const quantity = row.querySelector(".quantity-dropdown").value;
-    if (part && quantity) {
+
+    if (!part || !quantity) {
+      hasEmptyFields = true; // Track if any fields are empty
+    } else {
       formattedParts.push(`${part}(${quantity})`);
     }
   });
 
+  return { formattedParts: formattedParts.join(", "), hasEmptyFields };
+}
+
+// Function to send data to JotForm
+function sendDataToJotForm() {
+  const modelDropdown = document.getElementById("model-dropdown");
+  const selectedModel = modelDropdown.value;
+
   if (!selectedModel) {
     alert("Please select a model number.");
-    return false;
+    return;
   }
 
-  if (formattedParts.length === 0) {
+  const { formattedParts, hasEmptyFields } = getFormattedPartsList();
+
+  if (hasEmptyFields) {
+    alert("Please fill out all part and quantity fields or remove empty lines.");
+    return;
+  }
+
+  if (!formattedParts) {
     alert("Please add at least one part and quantity.");
-    return false;
+    return;
   }
 
-  // Assign values to hidden fields with exact IDs
-  const hiddenModelField = document.querySelector("#input_90");
-  const hiddenPartsField = document.querySelector("#input_91");
+  // Populate hidden fields with data
+  const hiddenModelField = document.querySelector("[name='model_number']");
+  const hiddenPartsField = document.querySelector("[name='parts_and_quantities']");
 
   if (hiddenModelField && hiddenPartsField) {
     hiddenModelField.value = selectedModel;
-    hiddenPartsField.value = formattedParts.join(", ");
-    console.log("Hidden fields populated.");
-  } else {
-    console.error("Hidden fields not found.");
+    hiddenPartsField.value = formattedParts;
+
+    console.log(`Hidden Model Value: ${hiddenModelField.value}`);
+    console.log(`Hidden Parts Value: ${hiddenPartsField.value}`);
   }
 
-  // Send completion message to JotForm
+  // Send a completion message to JotForm
   window.parent.postMessage(
     {
-      type: "widget-complete",
+      type: "widget-complete", // Notify JotForm that the widget process is done
       model_number: selectedModel,
-      parts_and_quantities: formattedParts.join(", ")
+      parts_and_quantities: formattedParts
     },
     "*"
   );
 
   console.log("Form data sent successfully!");
-  return true;
 }
 
 // Add a new part/quantity row
@@ -124,13 +138,11 @@ function addPart() {
 // Remove a part/quantity row
 function removePart(button) {
   const row = button.parentElement;
-  row.remove();
+  row.remove(); // Remove the corresponding row
 }
 
-// Attach form submit listener
+// Attach event listener to form submission
 document.querySelector("form").addEventListener("submit", (e) => {
   e.preventDefault(); // Prevent default submission
-  if (sendDataToJotForm()) {
-    e.target.submit(); // Submit if all fields are valid
-  }
+  sendDataToJotForm(); // Send data on form submission
 });
