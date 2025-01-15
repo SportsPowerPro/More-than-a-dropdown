@@ -163,8 +163,8 @@ function updateResults() {
   console.log("Selected model:", selectedModel);
   console.log("Formatted parts with quantities:", formattedParts);
 
-  document.getElementById("input_90").value = "test;
-  document.getElementById("input_91").value = "test";
+  document.getElementById("input_90").value = selectedModel || "";
+  document.getElementById("input_91").value = formattedParts.join(", ") || "";
 }
 
 document.addEventListener("DOMContentLoaded", () => {
