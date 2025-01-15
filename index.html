@@ -3,91 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Model and Parts Selector Widget</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-    }
-    .form-container {
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-    label {
-      font-weight: bold;
-      margin-bottom: 8px;
-      display: block;
-    }
-    select, button {
-      padding: 10px;
-      margin-bottom: 10px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-    .select-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
-    .parts-dropdown {
-      flex: 3;  /* Larger part dropdown */
-      max-width: calc(100% - 20px); 
-    }
-    .quantity-dropdown {
-      width: 70px; /* Just wide enough for 3 digits and the arrow */
-    }
-    .remove-button {
-      background: none;
-      border: none;
-      color: red;
-      font-size: 20px;
-      cursor: pointer;
-      padding: 0;
-    }
-    .remove-button:hover {
-      color: darkred;
-    }
-    .add-part-button {
-      background-color: #007bff;
-      color: white;
-      border: none;
-      cursor: pointer;
-      width: 100%;
-      padding: 12px;
-      font-weight: bold;
-    }
-    .add-part-button:hover {
-      background-color: #0056b3;
-    }
-    .submit-button {
-      background-color: #6c757d;
-      color: white;
-      width: 100%;
-      padding: 12px;
-      font-weight: bold;
-      border: none;
-    }
-  </style>
+  <title>Model/Parts Selector</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="form-container">
-    <label for="model-dropdown">Select Model:</label>
-    <select id="model-dropdown" class="model-dropdown" style="width: 100%;"></select>
-
-    <div id="parts-list"></div>
-
-    <button class="add-part-button" onclick="addPart()">+ Add Part</button>
-    <button class="submit-button" id="submit-button">Submit</button>
-
-    <!-- Hidden fields for JotForm -->
-    <input type="hidden" id="hidden-model" name="q90_model_number">
-    <input type="hidden" id="hidden-parts" name="q91_parts_and_quantities">
+  <div class="widget-container">
+    <h3>Model/Parts Selector</h3>
+    <form id="widget-form">
+      <label for="model-dropdown">Select Model:</label>
+      <select id="model-dropdown" class="full-width-dropdown"></select>
+      <div id="parts-list"></div>
+      <button type="button" class="add-part-button" onclick="addPart()">+ Add Part</button>
+    </form>
   </div>
-
   <script src="script.js"></script>
 </body>
 </html>
