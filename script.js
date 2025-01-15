@@ -120,5 +120,6 @@ document.querySelector("body").addEventListener("submit", (e) => {
 });
 
 function formatOutput (){
- document.getElementById("input_90").value = selectedModel;
+ const model_number=document.getElementById("input_90");
+  model_number.value=document.getElementById("model-dropdown").value;
 };
