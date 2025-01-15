@@ -1,3 +1,4 @@
+// Models and corresponding parts
 const modelPartsData = {
   "MSC-3782-BM": [
     "A1", "A2", "A3", "A5", "A6", "A7", "B4", "C2",
@@ -18,7 +19,17 @@ const modelPartsData = {
 // Populate the model dropdown on page load
 window.onload = function () {
   const modelDropdown = document.getElementById("model-dropdown");
-  modelDropdown.innerHTML = `<option value="" disabled selected>Select your Model Number</option>`;
+  modelDropdown.innerHTML = "";  // Clear existing options
+
+  // Add placeholder text
+  const placeholderOption = document.createElement("option");
+  placeholderOption.value = "";
+  placeholderOption.textContent = "Select your Model Number";
+  placeholderOption.disabled = true;
+  placeholderOption.selected = true;
+  modelDropdown.appendChild(placeholderOption);
+
+  // Add models to the dropdown
   Object.keys(modelPartsData).forEach((model) => {
     const option = document.createElement("option");
     option.value = model;
@@ -27,7 +38,7 @@ window.onload = function () {
   });
 };
 
-// Generate quantity options (1 to 100)
+// Generate quantity options from 1 to 100
 function getQuantityOptions() {
   let options = "";
   for (let i = 1; i <= 100; i++) {
@@ -36,91 +47,68 @@ function getQuantityOptions() {
   return options;
 }
 
-// Add new part row
+// Add a new part/quantity row
 function addPart() {
   const selectedModel = document.getElementById("model-dropdown").value;
-  if (!selectedModel) {
-    alert("Please select a model first.");
-    return;
-  }
+  const selectedParts = modelPartsData[selectedModel] || [];
 
   const partsList = document.getElementById("parts-list");
-  const partRow = document.createElement("div");
-  partRow.className = "select-row";
+  const newRow = document.createElement("div");
+  newRow.className = "select-row";
 
-  const partsDropdown = modelPartsData[selectedModel].map((part) => `<option value="${part}">${part}</option>`).join("");
-  partRow.innerHTML = `
-    <select class="parts-dropdown" onchange="updatePartDropdowns()">
+  newRow.innerHTML = `
+    <select class="parts-dropdown">
       <option value="" disabled selected>Select a Part</option>
-      ${partsDropdown}
+      ${selectedParts.map((part) => `<option value="${part}">${part}</option>`).join("")}
     </select>
-    <select class="quantity-dropdown">${getQuantityOptions()}</select>
+    <select class="quantity-dropdown">
+      ${getQuantityOptions()}
+    </select>
     <button class="remove-button" onclick="removePart(this)">❌</button>
   `;
-  partsList.appendChild(partRow);
-  updatePartDropdowns(); // Update dropdowns after adding
-const model_number=document.getElementById("input_90");
-  model_number.value=document.getElementById("model-dropdown").value;
+
+  partsList.appendChild(newRow);
 }
 
-// Remove part row
+// Remove a part/quantity row
 function removePart(button) {
-  button.parentElement.remove();
-  updatePartDropdowns(); // Update dropdowns after removing
+  const row = button.parentElement;
+  row.remove();  // Remove the corresponding row
 }
 
-// Update dropdowns to disable selected parts
-function updatePartDropdowns() {
-  const selectedParts = Array.from(document.querySelectorAll(".parts-dropdown")).map((dropdown) => dropdown.value);
-  const partDropdowns = document.querySelectorAll(".parts-dropdown");
-
-  partDropdowns.forEach((dropdown) => {
-    const currentSelection = dropdown.value;
-    dropdown.querySelectorAll("option").forEach((option) => {
-      option.disabled = selectedParts.includes(option.value) && option.value !== currentSelection;
-    });
-  });
-}
-
-// Handle form submission to JotForm
-document.querySelector("body").addEventListener("submit", (e) => {
-  const modelDropdown = document.getElementById("model-dropdown");
-  const selectedModel = modelDropdown.value;
+// Get formatted parts list
+function getFormattedPartsList() {
   const partsList = document.querySelectorAll("#parts-list .select-row");
-
-  if (!selectedModel) {
-    alert("Please select a model.");
-    e.preventDefault();
-    return;
-  }
-
-  const formattedParts = [];
-  let hasEmptyFields = false;
+  let formattedParts = [];
 
   partsList.forEach((row) => {
     const part = row.querySelector(".parts-dropdown").value;
     const quantity = row.querySelector(".quantity-dropdown").value;
 
-    if (!part || !quantity) {
-      hasEmptyFields = true;
-    } else {
+    if (part && quantity) {
       formattedParts.push(`${part}(${quantity})`);
     }
   });
 
-  if (hasEmptyFields) {
-    alert("Please fill out all part and quantity fields or remove empty rows.");
-    e.preventDefault();
-    return;
-  }
+  return formattedParts.join(", ");
+}
 
-  document.getElementById("input_90").value = selectedModel;
-  document.getElementById("input_91").value = formattedParts.join(", ");
+// Function to update hidden fields in real-time
+function updateHiddenFields() {
+  const selectedModel = document.getElementById("model-dropdown").value;
+  const formattedPartsList = getFormattedPartsList();
 
-  // Send data to JotForm
-  window.parent.postMessage({ type: "widget-complete" }, "*");
+  // Populate the hidden fields
+  document.getElementById("input_90").value = selectedModel || "";
+  document.getElementById("input_91").value = formattedPartsList || "";
+}
+
+// Attach event listeners
+document.getElementById("model-dropdown").addEventListener("change", updateHiddenFields);
+document.getElementById("parts-list").addEventListener("input", updateHiddenFields);
+
+// Add initial addPart button listener
+document.getElementById("add-part-button").addEventListener("click", () => {
+  addPart();
+  updateHiddenFields();  // Ensure fields update after adding a part
 });
-
-function formatOutput (){
- 
-};
