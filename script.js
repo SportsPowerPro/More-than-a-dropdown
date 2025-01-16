@@ -165,7 +165,7 @@ function updateResults() {
 
   document.getElementById("input_90").value = selectedModel;
   document.getElementById("input_91").value = formattedParts.join(", ");
-  document.querySelector(".form-textbox").value = selectedModel
+  document.querySelector(".form-textbox").value = selectedModel;
   document.querySelector(".form-textbox2").value = formattedParts.join(", ");
 
   
