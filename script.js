@@ -145,7 +145,6 @@ function addPart() {
   updateResults(); // Update the results after adding a new row
 }
 
-// Update hidden fields and display values
 function updateResults() {
   const partsList = document.querySelectorAll("#parts-list .select-row");
   let formattedParts = [];
@@ -163,14 +162,23 @@ function updateResults() {
   console.log("Selected model:", selectedModel);
   console.log("Formatted parts with quantities:", formattedParts);
 
-  document.getElementById("input_90").value = selectedModel;
-  document.getElementById("input_91").value = formattedParts.join(", ");
-  document.querySelector(".form-textbox").value = "nazz owes me lunch if this works";
-  document.querySelector(".form-textbox2").value = formattedParts.join(", ");
+  // Accessing parent document's elements
+  const input90 = parent.document.getElementById("input_90");
+  const input91 = parent.document.getElementById("input_91");
 
-  
+  if (input90) {
+    input90.value = selectedModel || "";
+  } else {
+    console.error("Element with ID 'input_90' not found in the parent document!");
+  }
 
+  if (input91) {
+    input91.value = formattedParts.join(", ") || "";
+  } else {
+    console.error("Element with ID 'input_91' not found in the parent document!");
+  }
 }
+
 
 document.addEventListener("DOMContentLoaded", () => {
   const updateButton = document.getElementById("update-button");
