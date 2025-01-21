@@ -1,3 +1,4 @@
+/* Styling the widget */
 body {
   font-family: Arial, sans-serif;
 }
@@ -6,93 +7,73 @@ body {
   max-width: 600px;
   margin: auto;
   padding: 20px;
-  border-radius: 8px;
-  background-color: white;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #f9f9f9;
 }
 
-.user-entry-container {
-  padding-bottom: 20px;
-}
-
-h2, h3 {
+.header {
   text-align: center;
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
 }
 
 label {
   display: block;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 
-select, input, button {
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-select#model-dropdown {
+input, select, button {
   width: 100%;
-  font-weight: bold;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
-select.parts-dropdown {
-  width: 70%;
-}
-
-select.quantity-dropdown {
-  width: 20%;
-}
-
-button.remove-button {
-  width: 40px;
-  background-color: transparent;
-  border: none;
-  font-size: 18px;
-  color: red;
-  cursor: pointer;
-}
-
-button.remove-button:hover {
-  color: darkred;
-}
-
-button#add-part-button {
-  background-color: #007bff;
+button {
+  background-color: #007BFF;
   color: white;
   font-weight: bold;
   cursor: pointer;
-  width: 100%;
 }
 
-button#add-part-button:hover {
+button:hover {
   background-color: #0056b3;
 }
 
-.results-container {
-  padding-top: 10px;
-}
-
-.summary-fields {
+.part-row {
   display: flex;
   gap: 10px;
+  margin-bottom: 10px;
 }
 
-.summary-fields input {
-  background-color: #f9f9f9;
-  font-weight: bold;
-  color: blue;
-  text-align: center;
-  width: 50%;
+.part-dropdown, .quantity-input {
+  flex: 1;
 }
 
-#update-button {
-background-color: indianred;
-    width: 100%;
-    font-weight: bold;
+.remove-button {
+  flex: 0.5;
+  background-color: red;
+  color: white;
+  border: none;
+  border-radius: 5px;
   cursor: pointer;
-  
 }
-.update-button :hover {
-backgound-color: #db6060;
+
+.remove-button:hover {
+  background-color: darkred;
+}
+
+#feedback {
+  margin-top: 20px;
+  color: green;
+}
+
+#parts-list {
+  margin-top: 20px;
 }
