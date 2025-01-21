@@ -8,7 +8,7 @@ body {
 }
 
 .container {
-  max-width: 600px;
+  max-width: 600px; /* Keep the widget width consistent */
   margin: 0 auto;
   padding: 20px;
   background-color: #fff;
@@ -75,7 +75,7 @@ button:hover {
 }
 
 .part-row .remove-button {
-  flex: 0.5; /* Ensures smaller size for the "X" button */
+  flex: 0.6; /* Ensures proper alignment with other fields */
   height: 42px;
   background-color: #ff4d4d;
   color: #fff;
@@ -94,12 +94,12 @@ button:hover {
 }
 
 button#addPartButton {
-  width: 100%; /* Spans the entire widget */
+  width: 100%; /* Full-width blue button */
   margin: 10px 0;
   padding: 10px 0;
   font-size: 16px;
+  display: block;
 }
-
 .parts-summary {
   margin-top: 20px;
   text-align: left;
