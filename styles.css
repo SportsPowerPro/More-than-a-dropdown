@@ -60,13 +60,14 @@ button:hover {
 
 .part-row {
   display: flex;
+  align-items: center;
   gap: 10px;
   margin-bottom: 10px;
-  align-items: center;
 }
 
 .part-row select,
 .part-row input {
+  flex: 2;
   height: 42px;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -75,13 +76,14 @@ button:hover {
 }
 
 .part-row .remove-button {
+  flex: 1;
   height: 42px;
   background-color: #ff4d4d;
   color: #fff;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  padding: 0 10px;
+  padding: 0;
   font-size: 16px;
   display: flex;
   align-items: center;
@@ -92,8 +94,10 @@ button:hover {
   background-color: #e60000;
 }
 
-.part-container {
+button#addPartButton {
   width: 100%;
+  margin: 10px 0;
+  padding: 10px 0;
 }
 
 .parts-summary {
