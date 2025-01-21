@@ -35,9 +35,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function populatePartDropdown(partDropdown, model) {
         const parts = modelParts[model] || [];
-        partDropdown.innerHTML = parts
-            .map((part) => `<option value="${part}">${part}</option>`)
-            .join("");
+        partDropdown.innerHTML = `
+            <option value="" disabled selected>Select Part Number</option>
+            ${parts.map((part) => `<option value="${part}">${part}</option>`).join("")}
+        `;
     }
 
     function addPart() {
@@ -76,7 +77,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (duplicate) {
                 alert(`Duplicate part "${selectedPart}" is not allowed.`);
-                partDropdown.value = "";
+                partDropdown.value = ""; // Reset dropdown to default
             }
             updateSummary();
         });
