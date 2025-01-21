@@ -23,10 +23,11 @@ const addPartButton = document.getElementById("add-part");
 const inputModel = document.getElementById("input-model");
 const inputParts = document.getElementById("input-parts");
 
-// Populate the model dropdown with a "Select your Model Number" default
+// Initialize model dropdown with a default option
 function initializeModelDropdown() {
     modelDropdown.innerHTML = ""; // Clear all existing options
 
+    // Default "Select your Model Number" option
     const defaultOption = document.createElement("option");
     defaultOption.value = "";
     defaultOption.textContent = "Select your Model Number";
@@ -34,7 +35,7 @@ function initializeModelDropdown() {
     defaultOption.selected = true;
     modelDropdown.appendChild(defaultOption);
 
-    // Populate models dynamically
+    // Populate model options dynamically
     Object.keys(models).forEach(model => {
         const option = document.createElement("option");
         option.value = model;
@@ -43,10 +44,11 @@ function initializeModelDropdown() {
     });
 }
 
-// Populate parts dropdown dynamically
+// Populate parts dropdown dynamically based on selected model
 function populatePartsDropdown(dropdown, parts) {
     dropdown.innerHTML = ""; // Clear all options
 
+    // Default "Select Part Number" option
     const defaultOption = document.createElement("option");
     defaultOption.value = "";
     defaultOption.textContent = "Select Part Number";
@@ -62,7 +64,7 @@ function populatePartsDropdown(dropdown, parts) {
     });
 }
 
-// Add new part selection row
+// Add a new part selection row
 function addPartRow() {
     const row = document.createElement("div");
     row.classList.add("part-line");
@@ -84,6 +86,7 @@ function addPartRow() {
         updateSummary();
     };
 
+    // Populate parts dropdown with parts for the currently selected model
     const selectedModel = modelDropdown.value;
     if (selectedModel && models[selectedModel]) {
         populatePartsDropdown(partDropdown, models[selectedModel]);
@@ -97,7 +100,7 @@ function addPartRow() {
     updateSummary();
 }
 
-// Update summary fields for selected model and parts
+// Update the summary fields and send data to JotForm
 function updateSummary() {
     const selectedModel = modelDropdown.value;
     const selectedParts = Array.from(partsList.querySelectorAll(".part-line"))
@@ -108,6 +111,7 @@ function updateSummary() {
         })
         .filter(Boolean);
 
+    // Update text fields for summary
     inputModel.value = selectedModel || "No model selected";
     inputParts.value = selectedParts.join(", ") || "No parts selected";
 
@@ -116,7 +120,6 @@ function updateSummary() {
             ? { apiKey: API_KEY, model: selectedModel, parts: selectedParts }
             : null;
 
-        console.log("Submitting value:", submitValue); // Debugging
         JFCustomWidget.sendSubmit({
             valid: !!submitValue,
             value: submitValue
@@ -127,8 +130,9 @@ function updateSummary() {
 // Event listeners
 modelDropdown.addEventListener("change", () => {
     const selectedModel = modelDropdown.value;
-    const partDropdowns = partsList.querySelectorAll(".part-dropdown");
     if (selectedModel && models[selectedModel]) {
+        // Update all parts dropdowns with new model's parts
+        const partDropdowns = partsList.querySelectorAll(".part-dropdown");
         partDropdowns.forEach(dropdown => populatePartsDropdown(dropdown, models[selectedModel]));
     }
     updateSummary();
@@ -138,5 +142,5 @@ addPartButton.addEventListener("click", addPartRow);
 
 partsList.addEventListener("change", updateSummary);
 
-// Initialize widget
+// Initialize the widget
 initializeModelDropdown();
