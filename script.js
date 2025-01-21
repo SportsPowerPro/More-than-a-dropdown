@@ -1,115 +1,220 @@
-const API_KEY = "14f8d0810207120e808bf23ccb94e8cc"; // Placeholder for potential future use
-
-const modelsAndParts = {
+// Models and corresponding parts
+const modelPartsData = {
   "MSC-3782-BM": [
-    "A1", "A2", "A3", "A5", "A6", "A7", "B4", "C2",
-    "J1", "J2", "J3", "J4", "J8", "J9", "K1",
-    "L1", "L2", "N11", "N12", "R1", "R2A", "R2B", "R3",
-    "R4", "R7", "R8", "S1", "X1-N", "X2-N", "X3-N", "X4-N",
-    "X5-N", "X6", "Y2", "Hardware A", "Hardware B"
+    "A1",
+    "A2",
+    "A3",
+    "A5",
+    "A6",
+    "A7",
+    "B4",
+    "C2",
+    "J1",
+    "J2",
+    "J3",
+    "J4",
+    "J8",
+    "J9",
+    "K1",
+    "L1",
+    "L2",
+    "N11",
+    "N12",
+    "R1",
+    "R2A",
+    "R2B",
+    "R3",
+    "R4",
+    "R7",
+    "R8",
+    "S1",
+    "X1-N",
+    "X2-N",
+    "X3-N",
+    "X4-N",
+    "X5-N",
+    "X6",
+    "Y2",
+    "Hardware A",
+    "Hardware B",
   ],
   "MSC-4510": [
-    "A1A", "A2A", "A3A", "C2", "A4A", "A5A", "A6", "A7",
-    "P1", "P2", "P3", "P4", "P5", "J1A", "J1B", "J2",
-    "K1", "L1-N", "L2-N", "M1", "M2", "M3", "M4", "M5",
-    "L3", "L4", "Y2", "X1-N", "X2-N", "X3-N", "X4-N",
-    "X5-N", "X6", "MSC-4510-Hardware A", "MSC-4510-Hardware B"
-  ]
+    "A1A",
+    "A2A",
+    "A3A",
+    "C2",
+    "A4A",
+    "A5A",
+    "A6",
+    "A7",
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "J1A",
+    "J1B",
+    "J2",
+    "K1",
+    "L1-N",
+    "L2-N",
+    "M1",
+    "M2",
+    "M3",
+    "M4",
+    "M5",
+    "L3",
+    "L4",
+    "Y2",
+    "X1-N",
+    "X2-N",
+    "X3-N",
+    "X4-N",
+    "X5-N",
+    "X6",
+    "MSC-4510-Hardware A",
+    "MSC-4510-Hardware B",
+  ],
 };
+// Populate the model dropdown on widget initialization
+function initializeWidget() {
+  const modelDropdown = document.getElementById("model-dropdown");
+  modelDropdown.innerHTML = `
+    <option value="" disabled selected>Select your Model Number</option>
+    <option value="MSC-3782-BM">MSC-3782-BM</option>
+    <option value="MSC-4510">MSC-4510</option>
+  `;
+}
 
-const modelDropdown = document.getElementById('model-dropdown');
-const partsList = document.getElementById('parts-list');
-const inputModel = document.getElementById('input-model');
-const inputParts = document.getElementById('input-parts');
-const addPartButton = document.getElementById('add-part');
+// Function to generate quantity options from 1 to 100
+function getQuantityOptions() {
+  let options = "";
+  for (let i = 1; i <= 100; i++) {
+    options += `<option value="${i}">${i}</option>`;
+  }
+  return options;
+}
 
-// Populate models dropdown
-const populateModels = () => {
-  const defaultOption = document.createElement('option');
-  defaultOption.value = '';
-  defaultOption.textContent = 'Select your Model Number';
-  modelDropdown.appendChild(defaultOption);
+// Add a new part/quantity row
+function addPart() {
+  const selectedModel = document.getElementById("model-dropdown").value;
+  const selectedParts = modelPartsData[selectedModel] || [];
 
-  Object.keys(modelsAndParts).forEach(model => {
-    const option = document.createElement('option');
-    option.value = model;
-    option.textContent = model;
-    modelDropdown.appendChild(option);
-  });
-};
+  if (!selectedModel) {
+    alert("Please select a model first.");
+    return;
+  }
 
-// Update parts dropdown
-const updatePartsDropdown = (dropdown, model) => {
-  dropdown.innerHTML = '';
-  const defaultOption = document.createElement('option');
-  defaultOption.value = '';
-  defaultOption.textContent = 'Select Part Number';
-  dropdown.appendChild(defaultOption);
+  const selectedPartsList = Array.from(
+    document.querySelectorAll(".parts-dropdown")
+  )
+    .map((dropdown) => dropdown.value)
+    .filter((part) => part !== "");
 
-  modelsAndParts[model].forEach(part => {
-    const option = document.createElement('option');
-    option.value = part;
-    option.textContent = part;
-    dropdown.appendChild(option);
-  });
-};
+  const availableParts = selectedParts.filter(
+    (part) => !selectedPartsList.includes(part)
+  );
 
-// Add a new part row
-const addPartRow = () => {
-  const model = modelDropdown.value;
-  if (!model) return alert('Please select a model first!');
+  const newRow = document.createElement("div");
+  newRow.className = "select-row";
 
-  const row = document.createElement('div');
-  row.className = 'part-row';
+  newRow.innerHTML = `
+    <select class="parts-dropdown" onchange="updateResults()">
+      <option value="" disabled selected>Select a Part</option>
+      ${availableParts
+        .map((part) => `<option value="${part}">${part}</option>`)
+        .join("")}
+    </select>
+    <select class="quantity-dropdown" onchange="updateResults()">
+      ${getQuantityOptions()}
+    </select>
+    <button class="remove-button" onclick="removePart(this)">❌</button>
+  `;
 
-  const partDropdown = document.createElement('select');
-  partDropdown.className = 'dropdown';
-  updatePartsDropdown(partDropdown, model);
+  document.getElementById("parts-list").appendChild(newRow);
+  updateResults();
+}
 
-  const quantityInput = document.createElement('input');
-  quantityInput.type = 'number';
-  quantityInput.min = 1;
-  quantityInput.value = 1;
-  quantityInput.className = 'input-field';
+// Update the widget results
+function updateResults() {
+  const partsList = document.querySelectorAll("#parts-list .select-row");
+  const selectedModel = document.getElementById("model-dropdown").value;
 
-  const removeButton = document.createElement('button');
-  removeButton.textContent = 'X';
-  removeButton.className = 'remove-button';
-  removeButton.addEventListener('click', () => row.remove());
-
-  row.appendChild(partDropdown);
-  row.appendChild(quantityInput);
-  row.appendChild(removeButton);
-  partsList.appendChild(row);
-};
-
-// Update summary
-const updateSummary = () => {
-  const selectedModel = modelDropdown.value;
-  inputModel.value = selectedModel || 'Selected Model';
-
-  const partsSummary = Array.from(partsList.children)
-    .map(row => {
-      const part = row.querySelector('select').value;
-      const quantity = row.querySelector('input').value;
+  const formattedParts = Array.from(partsList)
+    .map((row) => {
+      const part = row.querySelector(".parts-dropdown").value;
+      const quantity = row.querySelector(".quantity-dropdown").value;
       return part && quantity ? `${part}(${quantity})` : null;
     })
-    .filter(Boolean)
-    .join(', ');
+    .filter(Boolean);
 
-  inputParts.value = partsSummary || 'Selected Parts and Quantities';
-};
+  const data = {
+    model: selectedModel || "",
+    parts: formattedParts.join(", ") || "",
+  };
 
-// Event Listeners
-modelDropdown.addEventListener('change', () => {
-  partsList.innerHTML = '';
-  updateSummary();
+  JFCustomWidget.sendData(data);
+}
+
+// Remove a part/quantity row
+function removePart(button) {
+  const row = button.closest(".select-row");
+  if (row) {
+    row.remove();
+    updateResults();
+  }
+}
+
+// Widget initialization and event subscriptions
+document.addEventListener("DOMContentLoaded", () => {
+  initializeWidget();
+
+  JFCustomWidget.subscribe("ready", (data) => {
+    console.log("Widget is ready:", data);
+
+    // Prepopulate widget if there's existing data
+    if (data.value) {
+      const { model, parts } = JSON.parse(data.value);
+      document.getElementById("model-dropdown").value = model;
+
+      if (parts) {
+        parts.split(", ").forEach((partQuantity) => {
+          addPart();
+          const lastRow = document.querySelectorAll(
+            "#parts-list .select-row:last-child"
+          )[0];
+          const [part, quantity] = partQuantity.match(/(.+)\((\d+)\)/).slice(1);
+          lastRow.querySelector(".parts-dropdown").value = part;
+          lastRow.querySelector(".quantity-dropdown").value = quantity;
+        });
+      }
+    }
+  });
+
+  JFCustomWidget.subscribe("submit", () => {
+    const selectedModel = document.getElementById("model-dropdown").value;
+    const partsList = document.querySelectorAll("#parts-list .select-row");
+
+    const partsDetails = Array.from(partsList)
+      .map((row) => {
+        const part = row.querySelector(".parts-dropdown").value;
+        const quantity = row.querySelector(".quantity-dropdown").value;
+        return part && quantity ? `${part}(${quantity})` : null;
+      })
+      .filter(Boolean);
+
+    const result = {
+      valid: !!selectedModel && partsDetails.length > 0,
+      value: JSON.stringify({
+        model: selectedModel,
+        parts: partsDetails.join(", "),
+      }),
+    };
+
+    console.log("Submitting widget data:", result);
+    JFCustomWidget.sendSubmit(result);
+  });
 });
 
-addPartButton.addEventListener('click', addPartRow);
-partsList.addEventListener('change', updateSummary);
-partsList.addEventListener('input', updateSummary);
-
-// Initialize
-populateModels();
-
+// Add part button event
+document.getElementById("add-part").addEventListener("click", addPart);
