@@ -4,32 +4,240 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Model/Parts Selector Widget</title>
-  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* CSS Styling */
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      background-color: #f9f9f9;
+    }
+
+    .header {
+      text-align: center;
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      background-color: #007BFF;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .part-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .part-dropdown, .quantity-input {
+      flex: 1;
+    }
+
+    .remove-button {
+      flex: 0.5;
+      background-color: red;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .remove-button:hover {
+      background-color: darkred;
+    }
+
+    #feedback {
+      margin-top: 20px;
+      color: green;
+    }
+
+    #parts-list {
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
     <div class="header">Model/Parts Selector</div>
-    
-    <!-- Form Group -->
+
+    <!-- Model Dropdown -->
     <div class="form-group">
-      <label for="model">Select Model:</label>
-      <select id="model">
-        <option value="">Select your Model</option>
-        <option value="MSC-3782-BM">MSC-3782-BM</option>
-        <option value="MSC-4510">MSC-4510</option>
+      <label for="model-dropdown">Select Model:</label>
+      <select id="model-dropdown">
+        <option value="" disabled selected>Select your Model Number</option>
       </select>
     </div>
 
-    <div class="form-group">
-      <label for="quantity">Enter Quantity:</label>
-      <input type="number" id="quantity" placeholder="Enter quantity">
-    </div>
+    <!-- Parts List -->
+    <div id="parts-list"></div>
 
-    <button id="submitButton">Submit</button>
+    <button id="add-part-button">+ Add Part</button>
 
+    <!-- Feedback and Results -->
     <div id="feedback"></div>
-  </div>
 
-  <script src="script.js"></script>
+    <!-- Hidden Textboxes for Results -->
+    <input type="text" id="input_90" name="model_number" readonly placeholder="Selected Model">
+    <input type="text" id="input_91" name="parts_and_quantities" readonly placeholder="Selected Parts and Quantities">
+
+    <script>
+      // JavaScript Logic
+
+      // API Key
+      const API_KEY = "your-api-key-here"; // Replace with your provided API key
+
+      // Predefined models and parts
+      const models = ["MSC-3782-BM", "MSC-4510"];
+      const parts = ["A1", "A2", "A3", "A4", "A5", "A6", "A7"];
+
+      // Initialize the widget
+      JFCustomWidget.subscribe("ready", function(data) {
+        console.log("Widget is ready:", data);
+
+        // Populate model dropdown
+        const modelDropdown = document.getElementById("model-dropdown");
+        models.forEach((model) => {
+          const option = document.createElement("option");
+          option.value = model;
+          option.textContent = model;
+          modelDropdown.appendChild(option);
+        });
+
+        // Feedback message
+        const feedback = document.getElementById("feedback");
+        feedback.textContent = "Widget is initialized with API!";
+      });
+
+      // Add Part Functionality
+      function addPart() {
+        const partDropdown = document.createElement("select");
+        const quantityInput = document.createElement("input");
+        const removeButton = document.createElement("button");
+
+        partDropdown.className = "part-dropdown";
+        quantityInput.className = "quantity-input";
+        removeButton.className = "remove-button";
+
+        // Populate part dropdown
+        parts.forEach((part) => {
+          const option = document.createElement("option");
+          option.value = part;
+          option.textContent = part;
+          partDropdown.appendChild(option);
+        });
+
+        // Add quantity input
+        quantityInput.type = "number";
+        quantityInput.min = 1;
+        quantityInput.placeholder = "Quantity";
+
+        // Remove button functionality
+        removeButton.textContent = "X";
+        removeButton.addEventListener("click", function () {
+          const parent = removeButton.parentElement;
+          parent.remove();
+          updateResults(); // Update results when a part is removed
+        });
+
+        // Append to parts list
+        const partsList = document.getElementById("parts-list");
+        const partRow = document.createElement("div");
+        partRow.className = "part-row";
+        partRow.appendChild(partDropdown);
+        partRow.appendChild(quantityInput);
+        partRow.appendChild(removeButton);
+        partsList.appendChild(partRow);
+
+        // Update results automatically when part or quantity changes
+        partDropdown.addEventListener("change", updateResults);
+        quantityInput.addEventListener("input", updateResults);
+      }
+
+      // Update results and validate duplicate entries
+      function updateResults() {
+        const model = document.getElementById("model-dropdown").value;
+        const partRows = document.querySelectorAll(".part-row");
+        const results = [];
+        const partTracker = new Set(); // To track duplicate parts
+
+        partRows.forEach((row) => {
+          const part = row.querySelector(".part-dropdown").value;
+          const quantity = row.querySelector(".quantity-input").value;
+
+          // Skip empty rows
+          if (!part || !quantity) return;
+
+          // Check for duplicates
+          if (partTracker.has(part)) {
+            alert(`Duplicate part detected: ${part}`);
+            return;
+          }
+
+          partTracker.add(part);
+          results.push(`${part}(${quantity})`);
+        });
+
+        // Update text boxes
+        document.getElementById("input_90").value = model;
+        document.getElementById("input_91").value = results.join(", ");
+      }
+
+      // Attach Add Part functionality to button
+      document.getElementById("add-part-button").addEventListener("click", addPart);
+
+      // Attach Submit functionality
+      JFCustomWidget.subscribe("submit", function () {
+        const model = document.getElementById("input_90").value;
+        const partsSummary = document.getElementById("input_91").value;
+
+        const widgetData = {
+          type: "submit",
+          value: {
+            model: model,
+            parts: partsSummary,
+          },
+          apiKey: API_KEY, // Include API Key
+        };
+
+        // Send data to JotForm
+        JFCustomWidget.sendData(widgetData);
+
+        alert("Form submitted successfully!");
+      });
+
+      // Ensure initial results are updated
+      document.getElementById("model-dropdown").addEventListener("change", updateResults);
+    </script>
+  </div>
 </body>
 </html>
