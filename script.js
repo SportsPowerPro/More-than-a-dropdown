@@ -1,5 +1,5 @@
 // API Key
-const API_KEY = "your-api-key-here"; // Replace with your actual API key
+const API_KEY = "14f8d0810207120e808bf23ccb94e8cc"; // Replace with your actual API key
 
 // Predefined models and their corresponding parts
 const modelPartsData = {
