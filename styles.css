@@ -1,79 +1,94 @@
-/* Styling the widget */
 body {
-  font-family: Arial, sans-serif;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
 }
 
 .container {
-  max-width: 600px;
-  margin: auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  background-color: #f9f9f9;
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.header {
-  text-align: center;
-  font-size: 1.5rem;
-  margin-bottom: 20px;
+h1, h2 {
+    text-align: center;
+    margin-bottom: 20px;
 }
 
-.form-group {
-  margin-bottom: 20px;
+.form-section {
+    margin-bottom: 20px;
 }
 
 label {
-  display: block;
-  margin-bottom: 5px;
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
 }
 
-input, select, button {
-  width: 100%;
-  padding: 10px;
-  margin-top: 5px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+select, input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
 }
 
-button {
-  background-color: #007BFF;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
+.btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
 }
 
-button:hover {
-  background-color: #0056b3;
+.btn:hover {
+    background-color: #0056b3;
 }
 
-.part-row {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 10px;
+.part-line {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
 }
 
 .part-dropdown, .quantity-input {
-  flex: 1;
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
 }
 
-.remove-button {
-  flex: 0.5;
-  background-color: red;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+.remove-part {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 10px;
+    cursor: pointer;
 }
 
-.remove-button:hover {
-  background-color: darkred;
+.remove-part:hover {
+    background-color: #a71d2a;
 }
 
-#feedback {
-  margin-top: 20px;
-  color: green;
-}
-
-#parts-list {
-  margin-top: 20px;
+.summary-box {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #007bff;
+    border-radius: 4px;
+    font-size: 16px;
+    color: #007bff;
+    background-color: #f1faff;
 }
