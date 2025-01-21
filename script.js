@@ -1,5 +1,5 @@
 // API Key
-const API_KEY = "your-api-key-here"; // Replace with your provided API key
+const API_KEY = "your-api-key-here"; // Replace with your actual API key
 
 // Predefined models and their corresponding parts
 const modelPartsData = {
@@ -19,34 +19,32 @@ const modelPartsData = {
   ]
 };
 
-// Initialize the widget
-JFCustomWidget.subscribe("ready", function(data) {
-  console.log("Widget is ready:", data);
-
-  // Populate model dropdown
+// Populate model dropdown on page load
+function populateModelDropdown() {
   const modelDropdown = document.getElementById("model-dropdown");
+
+  // Clear existing options
+  modelDropdown.innerHTML = '<option value="" disabled selected>Select your Model Number</option>';
+
+  // Add models to dropdown
   Object.keys(modelPartsData).forEach((model) => {
     const option = document.createElement("option");
     option.value = model;
     option.textContent = model;
     modelDropdown.appendChild(option);
   });
-
-  // Feedback message
-  const feedback = document.getElementById("feedback");
-  feedback.textContent = "Widget is initialized with API!";
-});
+}
 
 // Add Part Functionality
 function addPart() {
   const model = document.getElementById("model-dropdown").value;
-  const selectedParts = modelPartsData[model] || [];
 
   if (!model) {
     alert("Please select a model first.");
     return;
   }
 
+  const selectedParts = modelPartsData[model] || [];
   const partDropdown = document.createElement("select");
   const quantityInput = document.createElement("input");
   const removeButton = document.createElement("button");
@@ -115,14 +113,19 @@ function updateResults() {
   });
 
   // Update text boxes
-  document.getElementById("input_90").value = model;
-  document.getElementById("input_91").value = results.join(", ");
+  document.getElementById("input_90").value = model || "None";
+  document.getElementById("input_91").value = results.join(", ") || "None";
 }
 
 // Attach Add Part functionality to button
 document.getElementById("add-part-button").addEventListener("click", addPart);
 
-// Attach Submit functionality
+// Initialize the widget
+document.addEventListener("DOMContentLoaded", () => {
+  populateModelDropdown(); // Populate model dropdown
+});
+
+// Submit functionality for the widget
 JFCustomWidget.subscribe("submit", function () {
   const model = document.getElementById("input_90").value;
   const partsSummary = document.getElementById("input_91").value;
@@ -141,6 +144,3 @@ JFCustomWidget.subscribe("submit", function () {
 
   alert("Form submitted successfully!");
 });
-
-// Ensure initial results are updated
-document.getElementById("model-dropdown").addEventListener("change", updateResults);
