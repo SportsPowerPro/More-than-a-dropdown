@@ -1,61 +1,83 @@
-/* styles.css */
 body {
   font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
   margin: 0;
   padding: 20px;
-  background-color: #f4f4f4;
 }
 
-.widget-container {
-  background-color: #fff;
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  background: #fff;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  max-width: 600px;
-  margin: 0 auto;
 }
 
-.header-title {
+h1, h2 {
   text-align: center;
   color: #333;
 }
 
-.dropdown, .input-field {
+.model-selector, .summary-section {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.dropdown, .summary-input {
   width: 100%;
   padding: 10px;
-  margin: 10px 0;
+  margin-bottom: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
 }
 
-.parts-section {
-  margin-top: 20px;
+.parts-list {
+  margin-bottom: 20px;
+}
+
+.part-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.dropdown {
+  flex: 2;
+}
+
+.input-field {
+  flex: 1;
+}
+
+.remove-button {
+  background: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.remove-button:hover {
+  background: #e60000;
 }
 
 .add-part-button {
-  background-color: #007bff;
-  color: #fff;
+  background: #007bff;
+  color: white;
   border: none;
-  padding: 10px 20px;
   border-radius: 4px;
+  padding: 10px;
+  width: 100%;
   cursor: pointer;
 }
 
 .add-part-button:hover {
-  background-color: #0056b3;
-}
-
-.summary-title {
-  text-align: center;
-  margin-top: 20px;
-}
-
-.summary-section {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-#input-model, #input-parts {
-  color: #007bff;
+  background: #0056b3;
 }
