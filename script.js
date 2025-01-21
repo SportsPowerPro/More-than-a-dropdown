@@ -40,7 +40,7 @@ const populateModels = () => {
 
 // Update parts dropdown
 const updatePartsDropdown = (dropdown, model) => {
-  dropdown.innerHTML = ''; // Clear existing options
+  dropdown.innerHTML = '';
   const defaultOption = document.createElement('option');
   defaultOption.value = '';
   defaultOption.textContent = 'Select Part Number';
@@ -54,7 +54,7 @@ const updatePartsDropdown = (dropdown, model) => {
   });
 };
 
-// Add new part row
+// Add a new part row
 const addPartRow = () => {
   const model = modelDropdown.value;
   if (!model) return alert('Please select a model first!');
@@ -100,9 +100,9 @@ const updateSummary = () => {
   inputParts.value = partsSummary || 'Selected Parts and Quantities';
 };
 
-// Event listeners
+// Event Listeners
 modelDropdown.addEventListener('change', () => {
-  partsList.innerHTML = ''; // Clear existing parts rows
+  partsList.innerHTML = '';
   updateSummary();
 });
 
@@ -112,3 +112,4 @@ partsList.addEventListener('input', updateSummary);
 
 // Initialize
 populateModels();
+
