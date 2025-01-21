@@ -60,23 +60,22 @@ button:hover {
 
 .part-row {
   display: flex;
-  align-items: center;
+  align-items: center; /* Ensures vertical alignment */
   gap: 10px;
   margin-bottom: 10px;
 }
 
-.part-row select,
+.part-row select {
+  flex: 2; /* Dropdown takes more space */
+}
+
 .part-row input {
-  flex: 2;
-  height: 42px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  padding: 5px 10px;
-  font-size: 14px;
+  flex: 1; /* Quantity box takes moderate space */
+  text-align: center; /* Aligns the text properly */
 }
 
 .part-row .remove-button {
-  flex: 1;
+  flex: 0.5; /* Ensures smaller size for the "X" button */
   height: 42px;
   background-color: #ff4d4d;
   color: #fff;
@@ -95,9 +94,10 @@ button:hover {
 }
 
 button#addPartButton {
-  width: 100%;
+  width: 100%; /* Spans the entire widget */
   margin: 10px 0;
   padding: 10px 0;
+  font-size: 16px;
 }
 
 .parts-summary {
