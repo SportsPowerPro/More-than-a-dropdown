@@ -7,28 +7,26 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="widget-container">
-    <h1 class="header-title">Model/Parts Selector</h1>
-    <div class="model-section">
+  <div class="container">
+    <h1>Model/Parts Selector</h1>
+    <div class="model-selector">
       <label for="model-dropdown">Select Model:</label>
       <select id="model-dropdown" class="dropdown">
-        <!-- Models will be dynamically added by JavaScript -->
+        <!-- Populated dynamically -->
       </select>
     </div>
-    <div id="parts-list" class="parts-section">
-      <!-- Part rows will be dynamically added here -->
+    <div id="parts-list" class="parts-list">
+      <!-- Dynamic parts rows added here -->
     </div>
     <button id="add-part" class="add-part-button">+ Add Part</button>
-
-    <h2 class="summary-title">Parts Summary</h2>
+    <h2>Parts Summary</h2>
     <div class="summary-section">
       <label for="input-model">Selected Model</label>
-      <input type="text" id="input-model" readonly value="Selected Model">
+      <input type="text" id="input-model" class="summary-input" readonly>
       <label for="input-parts">Selected Parts and Quantities</label>
-      <input type="text" id="input-parts" readonly value="Selected Parts and Quantities">
+      <input type="text" id="input-parts" class="summary-input" readonly>
     </div>
   </div>
-
   <script src="script.js"></script>
 </body>
 </html>
