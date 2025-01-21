@@ -23,9 +23,9 @@ const addPartButton = document.getElementById("add-part");
 const inputModel = document.getElementById("input-model");
 const inputParts = document.getElementById("input-parts");
 
-// Populate the model dropdown with an initial "Select your Model Number" option
+// Populate the model dropdown with a "Select your Model Number" default
 function initializeModelDropdown() {
-    modelDropdown.innerHTML = ""; // Clear existing options
+    modelDropdown.innerHTML = ""; // Clear all existing options
 
     const defaultOption = document.createElement("option");
     defaultOption.value = "";
@@ -34,7 +34,7 @@ function initializeModelDropdown() {
     defaultOption.selected = true;
     modelDropdown.appendChild(defaultOption);
 
-    // Add model options
+    // Populate models dynamically
     Object.keys(models).forEach(model => {
         const option = document.createElement("option");
         option.value = model;
@@ -43,9 +43,9 @@ function initializeModelDropdown() {
     });
 }
 
-// Populate part dropdown with parts for the selected model
+// Populate parts dropdown dynamically
 function populatePartsDropdown(dropdown, parts) {
-    dropdown.innerHTML = ""; // Clear previous options
+    dropdown.innerHTML = ""; // Clear all options
 
     const defaultOption = document.createElement("option");
     defaultOption.value = "";
@@ -62,7 +62,7 @@ function populatePartsDropdown(dropdown, parts) {
     });
 }
 
-// Add a row for selecting parts and quantities
+// Add new part selection row
 function addPartRow() {
     const row = document.createElement("div");
     row.classList.add("part-line");
@@ -97,7 +97,7 @@ function addPartRow() {
     updateSummary();
 }
 
-// Update the summary fields
+// Update summary fields for selected model and parts
 function updateSummary() {
     const selectedModel = modelDropdown.value;
     const selectedParts = Array.from(partsList.querySelectorAll(".part-line"))
@@ -127,8 +127,8 @@ function updateSummary() {
 // Event listeners
 modelDropdown.addEventListener("change", () => {
     const selectedModel = modelDropdown.value;
+    const partDropdowns = partsList.querySelectorAll(".part-dropdown");
     if (selectedModel && models[selectedModel]) {
-        const partDropdowns = partsList.querySelectorAll(".part-dropdown");
         partDropdowns.forEach(dropdown => populatePartsDropdown(dropdown, models[selectedModel]));
     }
     updateSummary();
@@ -138,5 +138,5 @@ addPartButton.addEventListener("click", addPartRow);
 
 partsList.addEventListener("change", updateSummary);
 
-// Initialize the widget
+// Initialize widget
 initializeModelDropdown();
