@@ -1,44 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Model/Parts Selector</title>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <div class="container">
-      <!-- User Entry Section -->
-      <div class="user-entry-container">
-        <h2>Model/Parts Selector</h2>
-        <label for="model-dropdown">Select Model:</label>
-        <select id="model-dropdown">
-          <option value="" disabled selected>Select your Model Number</option>
-          <option value="MSC-3782-BM">MSC-3782-BM</option>
-          <option value="MSC-4510">MSC-4510</option>
-        </select>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Custom Widget</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    .widget-container {
+      margin: 20px auto;
+      padding: 20px;
+      max-width: 600px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .form-field {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    button {
+      background-color: #007BFF;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
 
-        <div id="parts-list"></div>
+<div class="widget-container">
+  <h2>Custom JotForm Widget</h2>
 
-        <button id="add-part-button" onclick="addPart()">+ Add Part</button>
-        <button id="update-button" class="update-button" type="button">Click this button when you are finished adding parts</button>
-      </div>
+  <!-- Form Inputs -->
+  <div class="form-field">
+    <label for="model">Model Number:</label>
+    <select id="model">
+      <option value="MSC-3782-BM">MSC-3782-BM</option>
+      <option value="MSC-4510">MSC-4510</option>
+    </select>
+  </div>
 
-      <!-- Parts Summary Section -->
-      <div class="results-container">
-        <h3>Parts Summary</h3>
-        <div class="summary-fields">
-          <input type="text" id="input_90" name="model_number" readonly />
-          <input
-            type="text"
-            id="input_91"
-            name="parts_and_quantities"
-            readonly
-          />
-        </div>
-      </div>
+  <div class="form-field">
+    <label for="quantity">Quantity:</label>
+    <input type="number" id="quantity" min="1" placeholder="Enter quantity">
+  </div>
 
-      <script src="script.js"></script>
-    </div>
-  </body>
+  <button id="submitButton">Submit Data</button>
+
+  <!-- Feedback Section -->
+  <div id="feedback" style="margin-top: 20px; color: green; font-weight: bold;"></div>
+</div>
+
+<!-- JotForm API Script -->
+<script src="https://cdn.jotfor.ms/static/prototype.forms.js"></script>
+
+<script>
+  // Wait for the widget to be ready
+  JFCustomWidget.subscribe("ready", function(data) {
+    console.log("Widget is ready:", data);
+
+    // Initialize feedback message
+    const feedback = document.getElementById("feedback");
+    feedback.textContent = "Widget is initialized!";
+  });
+
+  // Send data to JotForm when the "Submit Data" button is clicked
+  const submitButton = document.getElementById("submitButton");
+  submitButton.addEventListener("click", function() {
+    // Get form values
+    const model = document.getElementById("model").value;
+    const quantity = document.getElementById("quantity").value;
+
+    if (!model || !quantity) {
+      alert("Please fill out all fields.");
+      return;
+    }
+
+    // Prepare data to send
+    const widgetData = {
+      type: "submit", // This informs JotForm it's a submission
+      value: {
+        model: model,
+        quantity: quantity
+      }
+    };
+
+    // Send the data to JotForm
+    JFCustomWidget.sendData(widgetData);
+
+    // Provide feedback to the user
+    document.getElementById("feedback").textContent = `Data sent: Model ${model}, Quantity ${quantity}`;
+  });
+
+  // Listen for JotForm "submit" event
+  JFCustomWidget.subscribe("submit", function() {
+    console.log("Form has been submitted!");
+  });
+</script>
+
+</body>
 </html>
