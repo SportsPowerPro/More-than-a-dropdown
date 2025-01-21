@@ -1,36 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Model/Parts Selector Widget</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model/Parts Selector</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="container">
-    <div class="header">Model/Parts Selector</div>
-
-    <!-- Model Dropdown -->
-    <div class="form-group">
-      <label for="model-dropdown">Select Model:</label>
-      <select id="model-dropdown">
-        <option value="" disabled selected>Select your Model Number</option>
-      </select>
+    <div class="container">
+        <h1>Model/Parts Selector</h1>
+        <div class="form-section">
+            <label for="model-dropdown">Select Model:</label>
+            <select id="model-dropdown">
+                <option value="">Select your Model Number</option>
+            </select>
+        </div>
+        <div id="parts-list"></div>
+        <button id="add-part-button" class="btn">+ Add Part</button>
+        <h2>Parts Summary</h2>
+        <input id="input_90" type="text" class="summary-box" readonly placeholder="Selected Model">
+        <input id="input_91" type="text" class="summary-box" readonly placeholder="Selected Parts and Quantities">
     </div>
-
-    <!-- Parts List -->
-    <div id="parts-list"></div>
-
-    <button id="add-part-button">+ Add Part</button>
-
-    <!-- Feedback and Results -->
-    <div id="feedback"></div>
-
-    <!-- Hidden Textboxes for Results -->
-    <input type="text" id="input_90" name="model_number" readonly placeholder="Selected Model">
-    <input type="text" id="input_91" name="parts_and_quantities" readonly placeholder="Selected Parts and Quantities">
-
     <script src="script.js"></script>
-  </div>
 </body>
 </html>
