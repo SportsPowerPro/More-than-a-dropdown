@@ -24,9 +24,11 @@ h1, h2 {
 }
 
 label {
-    display: block;
+        display: block;
     margin-bottom: 8px;
     font-weight: bold;
+    text-align: center;
+    
 }
 
 select, input {
