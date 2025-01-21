@@ -77,7 +77,7 @@ button:hover {
 
 .part-row .remove-button {
   flex: 0.6; /* Ensures proper alignment with other fields */
-  height: 42px;
+  height: 40px;
   background-color: #ff4d4d;
   color: #fff;
   border: none;
