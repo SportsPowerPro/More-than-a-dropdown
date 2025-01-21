@@ -1,26 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Model/Parts Selector</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Model/Parts Selector</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Model/Parts Selector</h1>
-        <div class="form-section">
-            <label for="model-dropdown">Select Model:</label>
-            <select id="model-dropdown">
-                <option value="">Select your Model Number</option>
-            </select>
-        </div>
-        <div id="parts-list"></div>
-        <button id="add-part-button" class="btn">+ Add Part</button>
-        <h2>Parts Summary</h2>
-        <input id="input_90" type="text" class="summary-box" readonly placeholder="Selected Model">
-        <input id="input_91" type="text" class="summary-box" readonly placeholder="Selected Parts and Quantities">
+  <div class="widget-container">
+    <h1>Model/Parts Selector</h1>
+    <div class="model-section">
+      <label for="model-dropdown">Select Model:</label>
+      <select id="model-dropdown" class="dropdown">
+        <!-- Models will be dynamically added by JavaScript -->
+      </select>
     </div>
-    <script src="script.js"></script>
+    <div id="parts-list" class="parts-section">
+      <!-- Part rows will be dynamically added here -->
+    </div>
+    <button id="add-part" class="add-part-button">+ Add Part</button>
+
+    <h2>Parts Summary</h2>
+    <div class="summary-section">
+      <label for="input-model">Selected Model</label>
+      <input type="text" id="input-model" readonly value="Selected Model">
+      <label for="input-parts">Selected Parts and Quantities</label>
+      <input type="text" id="input-parts" readonly value="Selected Parts and Quantities">
+    </div>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
