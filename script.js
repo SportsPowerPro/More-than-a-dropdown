@@ -1,21 +1,101 @@
 const modelPartsData = {
   "MSC-3782-BM": [
-    "A1", "A2", "A3", "A5", "A6", "A7", "B4", "C2",
-    "J1", "J2", "J3", "J4", "J8", "J9", "K1", "L1",
-    "L2", "N11", "N12", "R1", "R2A", "R2B", "R3", "R4",
-    "R7", "R8", "S1", "X1-N", "X2-N", "X3-N", "X4-N",
-    "X5-N", "X6", "Y2", "Hardware A", "Hardware B",
+    "A1",
+    "A2",
+    "A3",
+    "A5",
+    "A6",
+    "A7",
+    "B4",
+    "C2",
+    "J1",
+    "J2",
+    "J3",
+    "J4",
+    "J8",
+    "J9",
+    "K1",
+    "L1",
+    "L2",
+    "N11",
+    "N12",
+    "R1",
+    "R2A",
+    "R2B",
+    "R3",
+    "R4",
+    "R7",
+    "R8",
+    "S1",
+    "X1-N",
+    "X2-N",
+    "X3-N",
+    "X4-N",
+    "X5-N",
+    "X6",
+    "Y2",
+    "Hardware A",
+    "Hardware B",
   ],
   "MSC-4510": [
-    "A1A", "A2A", "A3A", "C2", "A4A", "A5A", "A6", "A7",
-    "P1", "P2", "P3", "P4", "P5", "J1A", "J1B", "J2",
-    "K1", "L1-N", "L2-N", "M1", "M2", "M3", "M4", "M5",
-    "L3", "L4", "Y2", "X1-N", "X2-N", "X3-N", "X4-N",
-    "X5-N", "X6", "MSC-4510-Hardware A", "MSC-4510-Hardware B",
+    "A1A",
+    "A2A",
+    "A3A",
+    "C2",
+    "A4A",
+    "A5A",
+    "A6",
+    "A7",
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "J1A",
+    "J1B",
+    "J2",
+    "K1",
+    "L1-N",
+    "L2-N",
+    "M1",
+    "M2",
+    "M3",
+    "M4",
+    "M5",
+    "L3",
+    "L4",
+    "Y2",
+    "X1-N",
+    "X2-N",
+    "X3-N",
+    "X4-N",
+    "X5-N",
+    "X6",
+    "MSC-4510-Hardware A",
+    "MSC-4510-Hardware B",
   ],
 };
 
+function initializeWidget() {
+  const modelDropdown = document.getElementById("model-dropdown");
+  if (!modelDropdown) {
+    console.error("Model dropdown not found");
+    return;
+  }
+
+  // Populate the dropdown with model options
+  modelDropdown.innerHTML = `
+    <option value="" disabled selected>Select your Model Number</option>
+    <option value="MSC-3782-BM">MSC-3782-BM</option>
+    <option value="MSC-4510">MSC-4510</option>
+  `;
+
+  console.log("Model dropdown initialized with options");
+}
+
 document.addEventListener("DOMContentLoaded", () => {
+  initializeWidget();
+
   const modelDropdown = document.getElementById("model-dropdown");
   const partsList = document.getElementById("parts-list");
   const addPartButton = document.getElementById("add-part");
