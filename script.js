@@ -1,41 +1,52 @@
-const modelPartsData = {
-  "MSC-3782-BM": [
-    "A1", "A2", "A3", "A5", "A6", "A7", "B4", "C2",
-    "J1", "J2", "J3", "J4", "J8", "J9", "K1", "L1",
-    "L2", "N11", "N12", "R1", "R2A", "R2B", "R3",
-    "R4", "R7", "R8", "S1", "X1-N", "X2-N", "X3-N",
-    "X4-N", "X5-N", "X6", "Y2", "Hardware A", "Hardware B",
-  ],
-  "MSC-4510": [
-    "A1A", "A2A", "A3A", "C2", "A4A", "A5A", "A6",
-    "A7", "P1", "P2", "P3", "P4", "P5", "J1A", "J1B",
-    "J2", "K1", "L1-N", "L2-N", "M1", "M2", "M3",
-    "M4", "M5", "L3", "L4", "Y2", "X1-N", "X2-N",
-    "X3-N", "X4-N", "X5-N", "X6", "MSC-4510-Hardware A",
-    "MSC-4510-Hardware B",
-  ],
-};
-initializeWidget();
-
-  const modelDropdown = document.getElementById("model-dropdown");
-  const partsList = document.getElementById("parts-list");
-  const addPartButton = document.getElementById("add-part");
+document.addEventListener("DOMContentLoaded", () => {
+  const modelPartsData = {
+    "MSC-3782-BM": ["A1", "A2", "A3", "A5"],
+    "MSC-4510": ["A1A", "A2A", "A3A", "C2"],
+  };
 
   function initializeWidget() {
     const modelDropdown = document.getElementById("model-dropdown");
-    if (modelDropdown) {
-      modelDropdown.innerHTML = `
-        <option value="" disabled selected>Select your Model Number</option>
-        <option value="MSC-3782-BM">MSC-3782-BM</option>
-        <option value="MSC-4510">MSC-4510</option>
-      `;
-      console.log("Model dropdown initialized.");
+    if (!modelDropdown) {
+      console.error("Model dropdown not found.");
+      return;
     }
+
+    modelDropdown.innerHTML = `
+      <option value="" disabled selected>Select your Model Number</option>
+      <option value="MSC-3782-BM">MSC-3782-BM</option>
+      <option value="MSC-4510">MSC-4510</option>
+    `;
+    console.log("Model dropdown initialized.");
+  }
+
+  function waitForFieldsAndPopulate(data) {
+    const maxRetries = 20;
+    let retries = 0;
+
+    function populateFields() {
+      const modelField = document.getElementById("input_96");
+      const partsField = document.getElementById("input_95");
+
+      if (modelField && partsField) {
+        modelField.value = data.model;
+        partsField.value = data.parts;
+        console.log("Fields successfully updated:", data);
+      } else if (retries < maxRetries) {
+        retries++;
+        console.log(`Retrying to find fields... Attempt: ${retries}`);
+        setTimeout(populateFields, 500);
+      } else {
+        console.error("Failed to find fields after retries.");
+      }
+    }
+
+    populateFields();
   }
 
   function updateResults() {
-    console.log("updateResults triggered");
+    console.log("updateResults triggered.");
 
+    const modelDropdown = document.getElementById("model-dropdown");
     const partsListRows = document.querySelectorAll("#parts-list .select-row");
     const selectedModel = modelDropdown.value;
 
@@ -55,35 +66,14 @@ initializeWidget();
     console.log("Selected Model:", data.model);
     console.log("Formatted Parts:", data.parts);
 
-    populateFields(data);
-
-    // Send data to JotForm
+    waitForFieldsAndPopulate(data);
     JFCustomWidget.sendData(data);
   }
 
-  function populateFields(data) {
-    const iframe = document.querySelector("iframe");
-    const iframeDoc = iframe ? iframe.contentDocument || iframe.contentWindow.document : document;
-
-    const modelField = iframeDoc.querySelector("#input_96");
-    const partsField = iframeDoc.querySelector("#input_95");
-
-    console.log("Model Field Found:", modelField);
-    console.log("Parts Field Found:", partsField);
-
-    if (modelField && partsField) {
-      modelField.value = data.model;
-      partsField.value = data.parts;
-      console.log("Fields successfully updated:", data);
-    } else {
-      console.error("Failed to populate fields:", { modelField, partsField });
-    }
-  }
-
-  addPartButton.addEventListener("click", () => {
-    console.log("Add Part Button Clicked");
-
+  function addPart() {
+    const modelDropdown = document.getElementById("model-dropdown");
     const selectedModel = modelDropdown.value;
+
     if (!selectedModel) {
       alert("Please select a model first.");
       return;
@@ -115,18 +105,19 @@ initializeWidget();
     `;
 
     row.querySelector(".remove-button").addEventListener("click", () => {
-      console.log("Remove Button Clicked");
       row.remove();
       updateResults();
     });
 
-    partsList.appendChild(row);
+    document.getElementById("parts-list").appendChild(row);
+    updateResults();
+  }
+
+  document.getElementById("add-part").addEventListener("click", addPart);
+  document.getElementById("model-dropdown").addEventListener("change", () => {
+    document.getElementById("parts-list").innerHTML = "";
     updateResults();
   });
 
-  modelDropdown.addEventListener("change", () => {
-    console.log("Model Dropdown Changed");
-    partsList.innerHTML = "";
-    updateResults();
-  });
+  initializeWidget();
 });
