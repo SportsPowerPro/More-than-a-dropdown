@@ -36,14 +36,8 @@ function waitForFieldsAndPopulate(data) {
   let retries = 0;
 
   function populateFields() {
-    const iframe = document.querySelector("iframe");
-    const iframeDoc = iframe ? iframe.contentDocument : document;
-
-    // Debug log to inspect elements
-    console.log("Checking fields within:", iframe ? "iframe" : "document");
-
-    const modelField = iframeDoc.querySelector('[name="q96_modelnumber"]');
-    const partsField = iframeDoc.querySelector('[name="q95_partsquantity"]');
+    const modelField = document.getElementById("input_96");
+    const partsField = document.getElementById("input_95");
 
     console.log("Model Field Found:", modelField);
     console.log("Parts Field Found:", partsField);
