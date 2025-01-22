@@ -87,14 +87,11 @@ function updateResults() {
     .filter(Boolean)
     .join(", "); // Join parts with commas for CRM
 
-  // Prepare data for CRM
-  const data = {
-    model: selectedModel || "", // Separate column for model number
-    parts: formattedParts || "", // Separate column for parts/quantities
-  };
-
-  // Send data to JotForm
-  JFCustomWidget.sendData(data);
+  // Send separate data fields to JotForm
+  JFCustomWidget.sendData({
+    modelNumber: selectedModel || "", // Send Model Number directly
+    partsQuantities: formattedParts || "", // Send Parts/Quantities directly
+  });
 }
 
 // Remove a part/quantity row
@@ -115,11 +112,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Prepopulate widget if there's existing data
     if (data.value) {
-      const { model, parts } = JSON.parse(data.value);
-      document.getElementById("model-dropdown").value = model;
+      const { modelNumber, partsQuantities } = JSON.parse(data.value);
+      document.getElementById("model-dropdown").value = modelNumber;
 
-      if (parts) {
-        parts.split(", ").forEach((partQuantity) => {
+      if (partsQuantities) {
+        partsQuantities.split(", ").forEach((partQuantity) => {
           addPart();
           const lastRow = document.querySelectorAll(
             "#parts-list .select-row:last-child"
@@ -144,17 +141,12 @@ document.addEventListener("DOMContentLoaded", () => {
       })
       .filter(Boolean);
 
-    // Prepare the data to send
-    const result = {
+    // Send separate data fields on submit
+    JFCustomWidget.sendSubmit({
       valid: !!selectedModel && partsDetails.length > 0,
-      value: JSON.stringify({
-        model: selectedModel, // Model for "Model Number" column
-        parts: partsDetails.join(", "), // Parts/Quantities for the "Parts/Quantity" column
-      }),
-    };
-
-    console.log("Submitting widget data:", result);
-    JFCustomWidget.sendSubmit(result);
+      modelNumber: selectedModel, // Model Number field
+      partsQuantities: partsDetails.join(", "), // Parts/Quantities field
+    });
   });
 });
 
