@@ -110,7 +110,7 @@ button#addPartButton {
   font-size: 18px;
   margin-bottom: 10px;
   color: #333;
-}
+/* } */
 
 .parts-summary input {
   width: 100%;
@@ -121,3 +121,27 @@ button#addPartButton {
   margin-bottom: 10px;
   box-sizing: border-box;
 }
+/* This is the Button that adds an additional line */
+.add-part {
+width: 100%;
+color: #000000;
+padding: 10px;
+margin: 10px;
+font-size: 16px;
+display: block;
+}
+.add-part:hover{
+  color: #ffffff;
+}
+/* End of Additional line Button */
+
+/* Start of Model Dropdown */
+.model-dropdown {
+  color: #000000;
+  font-size: 16px;
+  width: 100%;
+  padding: 4px;
+  margin: 10px;
+}
+/* End of Model Dropdown */
+.select-row{}
