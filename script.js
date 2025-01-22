@@ -82,10 +82,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const addPartButton = document.getElementById("add-part");
 
   function updateResults() {
+    console.log("updateResults triggered"); // Debugging trigger log
+
     const partsListRows = document.querySelectorAll("#parts-list .select-row");
     const selectedModel = document.getElementById("model-dropdown").value;
 
-    // Format parts and quantities into a string
     const formattedParts = Array.from(partsListRows)
       .map((row) => {
         const part = row.querySelector(".parts-dropdown").value;
@@ -94,24 +95,43 @@ document.addEventListener("DOMContentLoaded", () => {
       })
       .filter(Boolean);
 
-    // Create the data object to send
     const data = {
       model: selectedModel || "",
       parts: formattedParts.join(", ") || "",
     };
 
-    // Populate the JotForm read-only fields
+    // Debugging logs
+    console.log("Selected Model:", data.model);
+    console.log("Formatted Parts:", data.parts);
+
+    // Populate the JotForm fields
     const modelField = document.querySelector('[name="modelNumber"]');
     const partsField = document.querySelector('[name="partsQuantity"]');
 
-    if (modelField) modelField.value = data.model; // Update Model Number field
-    if (partsField) partsField.value = data.parts; // Update Parts/Quantities field
+    console.log("Model Field Found:", modelField);
+    console.log("Parts Field Found:", partsField);
+
+    if (modelField) {
+      modelField.value = data.model;
+      console.log("Model Field Updated:", modelField.value);
+    } else {
+      console.warn("Model Number field not found");
+    }
+
+    if (partsField) {
+      partsField.value = data.parts;
+      console.log("Parts Field Updated:", partsField.value);
+    } else {
+      console.warn("Parts/Quantity field not found");
+    }
 
     // Send structured data to JotForm
     JFCustomWidget.sendData(data);
   }
 
   addPartButton.addEventListener("click", () => {
+    console.log("Add Part Button Clicked"); // Debugging log
+
     const selectedModel = modelDropdown.value;
     if (!selectedModel) {
       alert("Please select a model first.");
@@ -144,6 +164,7 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
 
     row.querySelector(".remove-button").addEventListener("click", () => {
+      console.log("Remove Button Clicked"); // Debugging log
       row.remove();
       updateResults();
     });
@@ -153,6 +174,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   modelDropdown.addEventListener("change", () => {
+    console.log("Model Dropdown Changed"); // Debugging log
     partsList.innerHTML = ""; // Clear parts list on model change
     updateResults();
   });
