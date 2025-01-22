@@ -1,77 +1,17 @@
 const modelPartsData = {
   "MSC-3782-BM": [
-    "A1",
-    "A2",
-    "A3",
-    "A5",
-    "A6",
-    "A7",
-    "B4",
-    "C2",
-    "J1",
-    "J2",
-    "J3",
-    "J4",
-    "J8",
-    "J9",
-    "K1",
-    "L1",
-    "L2",
-    "N11",
-    "N12",
-    "R1",
-    "R2A",
-    "R2B",
-    "R3",
-    "R4",
-    "R7",
-    "R8",
-    "S1",
-    "X1-N",
-    "X2-N",
-    "X3-N",
-    "X4-N",
-    "X5-N",
-    "X6",
-    "Y2",
-    "Hardware A",
-    "Hardware B",
+    "A1", "A2", "A3", "A5", "A6", "A7", "B4", "C2",
+    "J1", "J2", "J3", "J4", "J8", "J9", "K1", "L1",
+    "L2", "N11", "N12", "R1", "R2A", "R2B", "R3",
+    "R4", "R7", "R8", "S1", "X1-N", "X2-N", "X3-N",
+    "X4-N", "X5-N", "X6", "Y2", "Hardware A", "Hardware B",
   ],
   "MSC-4510": [
-    "A1A",
-    "A2A",
-    "A3A",
-    "C2",
-    "A4A",
-    "A5A",
-    "A6",
-    "A7",
-    "P1",
-    "P2",
-    "P3",
-    "P4",
-    "P5",
-    "J1A",
-    "J1B",
-    "J2",
-    "K1",
-    "L1-N",
-    "L2-N",
-    "M1",
-    "M2",
-    "M3",
-    "M4",
-    "M5",
-    "L3",
-    "L4",
-    "Y2",
-    "X1-N",
-    "X2-N",
-    "X3-N",
-    "X4-N",
-    "X5-N",
-    "X6",
-    "MSC-4510-Hardware A",
+    "A1A", "A2A", "A3A", "C2", "A4A", "A5A", "A6",
+    "A7", "P1", "P2", "P3", "P4", "P5", "J1A", "J1B",
+    "J2", "K1", "L1-N", "L2-N", "M1", "M2", "M3",
+    "M4", "M5", "L3", "L4", "Y2", "X1-N", "X2-N",
+    "X3-N", "X4-N", "X5-N", "X6", "MSC-4510-Hardware A",
     "MSC-4510-Hardware B",
   ],
 };
@@ -91,6 +31,30 @@ function initializeWidget() {
   `;
 
   console.log("Model dropdown initialized with options");
+}
+
+function waitForFieldsAndPopulate(data) {
+  const maxRetries = 10; // Number of retries
+  let retries = 0;
+
+  function populateFields() {
+    const modelField = document.querySelector('[name="modelnumber"]');
+    const partsField = document.querySelector('[name="partsquantity"]');
+
+    if (modelField && partsField) {
+      modelField.value = data.model;
+      partsField.value = data.parts;
+      console.log("Fields successfully updated:", data);
+    } else if (retries < maxRetries) {
+      retries++;
+      console.log(`Retrying to find fields... Attempt: ${retries}`);
+      setTimeout(populateFields, 500); // Retry after 500ms
+    } else {
+      console.error("Failed to find fields after retries.");
+    }
+  }
+
+  populateFields();
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -122,23 +86,9 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("Selected Model:", data.model);
     console.log("Formatted Parts:", data.parts);
 
-    const modelField = document.querySelector('[name="modelNumber"]');
-    const partsField = document.querySelector('[name="partsQuantity"]');
+    waitForFieldsAndPopulate(data);
 
-    if (modelField) {
-      modelField.value = data.model;
-      console.log("Model Field Updated:", modelField.value);
-    } else {
-      console.warn("Model Number field not found");
-    }
-
-    if (partsField) {
-      partsField.value = data.parts;
-      console.log("Parts Field Updated:", partsField.value);
-    } else {
-      console.warn("Parts/Quantity field not found");
-    }
-
+    // Send structured data to JotForm
     JFCustomWidget.sendData(data);
   }
 
