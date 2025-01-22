@@ -15,55 +15,23 @@ const modelPartsData = {
     "MSC-4510-Hardware B",
   ],
 };
-function initializeWidget() {
-  const modelDropdown = document.getElementById("model-dropdown");
-  if (!modelDropdown) {
-    console.error("Model dropdown not found");
-    return;
-  }
-
-  // Populate the dropdown with model options
-  modelDropdown.innerHTML = `
-    <option value="" disabled selected>Select your Model Number</option>
-    <option value="MSC-3782-BM">MSC-3782-BM</option>
-    <option value="MSC-4510">MSC-4510</option>
-  `;
-  console.log("Model dropdown initialized with options");
-}
-
-function waitForFieldsAndPopulate(data) {
-  const maxRetries = 10;
-  let retries = 0;
-
-  function populateFields() {
-    const modelField = document.getElementById("input_96");
-    const partsField = document.getElementById("input_95");
-
-    console.log("Model Field Found:", modelField);
-    console.log("Parts Field Found:", partsField);
-
-    if (modelField && partsField) {
-      modelField.value = data.model;
-      partsField.value = data.parts;
-      console.log("Fields successfully updated:", data);
-    } else if (retries < maxRetries) {
-      retries++;
-      console.log(`Retrying to find fields... Attempt: ${retries}`);
-      setTimeout(populateFields, 500);
-    } else {
-      console.error("Failed to find fields after retries.");
-    }
-  }
-
-  populateFields();
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  initializeWidget();
+initializeWidget();
 
   const modelDropdown = document.getElementById("model-dropdown");
   const partsList = document.getElementById("parts-list");
   const addPartButton = document.getElementById("add-part");
+
+  function initializeWidget() {
+    const modelDropdown = document.getElementById("model-dropdown");
+    if (modelDropdown) {
+      modelDropdown.innerHTML = `
+        <option value="" disabled selected>Select your Model Number</option>
+        <option value="MSC-3782-BM">MSC-3782-BM</option>
+        <option value="MSC-4510">MSC-4510</option>
+      `;
+      console.log("Model dropdown initialized.");
+    }
+  }
 
   function updateResults() {
     console.log("updateResults triggered");
@@ -73,8 +41,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const formattedParts = Array.from(partsListRows)
       .map((row) => {
-        const part = row.querySelector(".parts-dropdown").value;
-        const quantity = row.querySelector(".quantity-dropdown").value;
+        const part = row.querySelector(".parts-dropdown")?.value;
+        const quantity = row.querySelector(".quantity-dropdown")?.value;
         return part && quantity ? `${part}(${quantity})` : null;
       })
       .filter(Boolean);
@@ -87,10 +55,29 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("Selected Model:", data.model);
     console.log("Formatted Parts:", data.parts);
 
-    waitForFieldsAndPopulate(data);
+    populateFields(data);
 
-    // Send structured data to JotForm
+    // Send data to JotForm
     JFCustomWidget.sendData(data);
+  }
+
+  function populateFields(data) {
+    const iframe = document.querySelector("iframe");
+    const iframeDoc = iframe ? iframe.contentDocument || iframe.contentWindow.document : document;
+
+    const modelField = iframeDoc.querySelector("#input_96");
+    const partsField = iframeDoc.querySelector("#input_95");
+
+    console.log("Model Field Found:", modelField);
+    console.log("Parts Field Found:", partsField);
+
+    if (modelField && partsField) {
+      modelField.value = data.model;
+      partsField.value = data.parts;
+      console.log("Fields successfully updated:", data);
+    } else {
+      console.error("Failed to populate fields:", { modelField, partsField });
+    }
   }
 
   addPartButton.addEventListener("click", () => {
