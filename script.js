@@ -38,9 +38,14 @@ function waitForFieldsAndPopulate(data) {
   let retries = 0;
 
   function populateFields() {
-    // Corrected selectors with 'qXX_' prefix
-    const modelField = document.querySelector('[name="q96_modelnumber"]');
-    const partsField = document.querySelector('[name="q95_partsquantity"]');
+    const iframe = document.querySelector("iframe");
+    const iframeDoc = iframe ? iframe.contentDocument : document;
+
+    const modelField = iframeDoc.querySelector('[name="q96_modelnumber"]');
+    const partsField = iframeDoc.querySelector('[name="q95_partsquantity"]');
+
+    console.log("Model Field Found:", modelField);
+    console.log("Parts Field Found:", partsField);
 
     if (modelField && partsField) {
       modelField.value = data.model;
