@@ -135,7 +135,7 @@ function addPart() {
   updateResults();
 }
 
-/// Update the widget results
+// Update the widget results
 function updateResults() {
   const partsList = document.querySelectorAll("#parts-list .select-row");
   const selectedModel = document.getElementById("model-dropdown").value;
@@ -148,19 +148,20 @@ function updateResults() {
     })
     .filter(Boolean);
 
-  // Send the model and parts separately
-  if (selectedModel) {
-    JFCustomWidget.sendData({
-      value: selectedModel, // Send model separately
-      fieldName: "model", // You can use any name to identify this field in Jotform
-    });
-  }
+  const data = {
+    model: selectedModel || "",
+    parts: formattedParts.join(", ") || "",
+  };
 
-  if (formattedParts.length > 0) {
-    JFCustomWidget.sendData({
-      value: formattedParts.join(", "), // Send parts separately
-      fieldName: "parts", // You can use any name to identify this field in Jotform
-    });
+  JFCustomWidget.sendData(data);
+}
+
+// Remove a part/quantity row
+function removePart(button) {
+  const row = button.closest(".select-row");
+  if (row) {
+    row.remove();
+    updateResults();
   }
 }
 
@@ -202,24 +203,12 @@ document.addEventListener("DOMContentLoaded", () => {
       })
       .filter(Boolean);
 
-    // Send the model and parts separately before submission
-    if (selectedModel) {
-      JFCustomWidget.sendData({
-        value: selectedModel, // Send model separately
-        fieldName: "model",
-      });
-    }
-
-    if (partsDetails.length > 0) {
-      JFCustomWidget.sendData({
-        value: partsDetails.join(", "), // Send parts separately
-        fieldName: "parts",
-      });
-    }
-
-    // Send submission
     const result = {
       valid: !!selectedModel && partsDetails.length > 0,
+      value: JSON.stringify({
+        model: selectedModel,
+        parts: partsDetails.join(", "),
+      }),
     };
 
     console.log("Submitting widget data:", result);
