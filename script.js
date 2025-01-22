@@ -135,7 +135,7 @@ function addPart() {
   updateResults();
 }
 
-// Update the widget results
+/// Update the widget results
 function updateResults() {
   const partsList = document.querySelectorAll("#parts-list .select-row");
   const selectedModel = document.getElementById("model-dropdown").value;
@@ -148,17 +148,20 @@ function updateResults() {
     })
     .filter(Boolean);
 
-  // Sending the model and parts separately
-  const modelData = {
-    model: selectedModel || "",
-  };
-  const partsData = {
-    parts: formattedParts.join(", ") || "",
-  };
+  // Send the model and parts separately
+  if (selectedModel) {
+    JFCustomWidget.sendData({
+      value: selectedModel, // Send model separately
+      fieldName: "model", // You can use any name to identify this field in Jotform
+    });
+  }
 
-  // Send the separate data
-  JFCustomWidget.sendData(modelData);
-  JFCustomWidget.sendData(partsData);
+  if (formattedParts.length > 0) {
+    JFCustomWidget.sendData({
+      value: formattedParts.join(", "), // Send parts separately
+      fieldName: "parts", // You can use any name to identify this field in Jotform
+    });
+  }
 }
 
 // Widget initialization and event subscriptions
@@ -199,21 +202,27 @@ document.addEventListener("DOMContentLoaded", () => {
       })
       .filter(Boolean);
 
-    const modelData = {
-      model: selectedModel || "",
-    };
-    const partsData = {
-      parts: partsDetails.join(", ") || "",
-    };
+    // Send the model and parts separately before submission
+    if (selectedModel) {
+      JFCustomWidget.sendData({
+        value: selectedModel, // Send model separately
+        fieldName: "model",
+      });
+    }
 
-    // Send the model and parts separately
+    if (partsDetails.length > 0) {
+      JFCustomWidget.sendData({
+        value: partsDetails.join(", "), // Send parts separately
+        fieldName: "parts",
+      });
+    }
+
+    // Send submission
     const result = {
       valid: !!selectedModel && partsDetails.length > 0,
     };
 
     console.log("Submitting widget data:", result);
-    JFCustomWidget.sendData(modelData);
-    JFCustomWidget.sendData(partsData);
     JFCustomWidget.sendSubmit(result);
   });
 });
