@@ -34,12 +34,13 @@ function initializeWidget() {
 }
 
 function waitForFieldsAndPopulate(data) {
-  const maxRetries = 10; // Number of retries
+  const maxRetries = 10;
   let retries = 0;
 
   function populateFields() {
-    const modelField = document.querySelector('[name="modelnumber"]');
-    const partsField = document.querySelector('[name="partsquantity"]');
+    // Corrected selectors with 'qXX_' prefix
+    const modelField = document.querySelector('[name="q96_modelnumber"]');
+    const partsField = document.querySelector('[name="q95_partsquantity"]');
 
     if (modelField && partsField) {
       modelField.value = data.model;
@@ -48,7 +49,7 @@ function waitForFieldsAndPopulate(data) {
     } else if (retries < maxRetries) {
       retries++;
       console.log(`Retrying to find fields... Attempt: ${retries}`);
-      setTimeout(populateFields, 500); // Retry after 500ms
+      setTimeout(populateFields, 500);
     } else {
       console.error("Failed to find fields after retries.");
     }
