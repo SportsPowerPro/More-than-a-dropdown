@@ -85,12 +85,12 @@ function updateResults() {
       return part && quantity ? `${part}(${quantity})` : null;
     })
     .filter(Boolean)
-    .join(","); // Join parts with commas for CRM
+    .join(", "); // Join parts with commas for CRM
 
   // Prepare data for CRM
   const data = {
-    modelNumber: selectedModel || "", // Separate column for model number
-    partsQuantities: formattedParts || "", // Separate column for parts/quantities
+    model: selectedModel || "", // Separate column for model number
+    parts: formattedParts || "", // Separate column for parts/quantities
   };
 
   // Send data to JotForm
@@ -115,11 +115,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Prepopulate widget if there's existing data
     if (data.value) {
-      const { modelNumber, partsQuantities } = JSON.parse(data.value);
-      document.getElementById("model-dropdown").value = modelNumber;
+      const { model, parts } = JSON.parse(data.value);
+      document.getElementById("model-dropdown").value = model;
 
-      if (partsQuantities) {
-        partsQuantities.split(",").forEach((partQuantity) => {
+      if (parts) {
+        parts.split(", ").forEach((partQuantity) => {
           addPart();
           const lastRow = document.querySelectorAll(
             "#parts-list .select-row:last-child"
@@ -144,11 +144,12 @@ document.addEventListener("DOMContentLoaded", () => {
       })
       .filter(Boolean);
 
+    // Prepare the data to send
     const result = {
       valid: !!selectedModel && partsDetails.length > 0,
       value: JSON.stringify({
-        modelNumber: selectedModel, // Model as its own field
-        partsQuantities: partsDetails.join(","), // Parts/Quantities as a single field
+        model: selectedModel, // Model for "Model Number" column
+        parts: partsDetails.join(", "), // Parts/Quantities for the "Parts/Quantity" column
       }),
     };
 
