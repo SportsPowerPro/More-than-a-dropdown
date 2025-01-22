@@ -15,7 +15,6 @@ const modelPartsData = {
     "MSC-4510-Hardware B",
   ],
 };
-
 function initializeWidget() {
   const modelDropdown = document.getElementById("model-dropdown");
   if (!modelDropdown) {
@@ -29,7 +28,6 @@ function initializeWidget() {
     <option value="MSC-3782-BM">MSC-3782-BM</option>
     <option value="MSC-4510">MSC-4510</option>
   `;
-
   console.log("Model dropdown initialized with options");
 }
 
@@ -40,6 +38,9 @@ function waitForFieldsAndPopulate(data) {
   function populateFields() {
     const iframe = document.querySelector("iframe");
     const iframeDoc = iframe ? iframe.contentDocument : document;
+
+    // Debug log to inspect elements
+    console.log("Checking fields within:", iframe ? "iframe" : "document");
 
     const modelField = iframeDoc.querySelector('[name="q96_modelnumber"]');
     const partsField = iframeDoc.querySelector('[name="q95_partsquantity"]');
