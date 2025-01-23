@@ -8,18 +8,14 @@
     <script src="//js.jotform.com/JotFormCustomWidget.min.js"></script>
   </head>
   <body>
-    <div class="container">
-      <h1>Model/Parts Selector</h1>
-      <div class="model-selector">
-        <label for="model-dropdown">Select Model:</label>
-        <select id="model-dropdown" class="dropdown model-dropdown">
-          <!-- Populated dynamically -->
-        </select>
+    <div class="model-parts-container">
+      <h1 class="page-title">Model/Parts Selector</h1>
+      <div class="model-selector-container">
+        <label for="model-dropdown" class="model-label">Select Model:</label>
+        <select id="model-dropdown" class="model-dropdown"></select>
       </div>
-      <div id="parts-list" class="parts-list">
-        <!-- Dynamic parts rows added here -->
-      </div>
-      <button id="add-part" class="add-part-button add-part">+ Add Part</button>
+      <div id="parts-list" class="parts-list-container"></div>
+      <button id="add-part" class="add-part-btn">+ Add Part</button>
     </div>
     <script src="script.js"></script>
   </body>
