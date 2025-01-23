@@ -143,7 +143,7 @@ function addPart() {
   updateResults();
 }
 
-// Update the widget results
+/// Update the widget results
 function updateResults() {
   const partsList = document.querySelectorAll(
     ".parts-list-container .parts-row"
@@ -158,12 +158,17 @@ function updateResults() {
     })
     .filter(Boolean);
 
+  // Send separate data: Model and Parts
   const data = {
     model: selectedModel || "",
     parts: formattedParts.join(", ") || "",
   };
 
-  JFCustomWidget.sendData(data);
+  // Send individual pieces of data
+  JFCustomWidget.sendData({
+    model: data.model,
+    parts: data.parts,
+  });
 }
 
 // Remove a part/quantity row
@@ -215,16 +220,27 @@ document.addEventListener("DOMContentLoaded", () => {
       })
       .filter(Boolean);
 
+    // Prepare separate data for model and parts
     const result = {
       valid: !!selectedModel && partsDetails.length > 0,
       value: JSON.stringify({
         model: selectedModel,
         parts: partsDetails.join(", "),
       }),
+      model: selectedModel,
+      parts: partsDetails.join(", "),
     };
 
     console.log("Submitting widget data:", result);
-    JFCustomWidget.sendSubmit(result);
+
+    // Send both as separate pieces of data
+    JFCustomWidget.sendSubmit({
+      valid: result.valid,
+      value: JSON.stringify({
+        model: result.model,
+        parts: result.parts,
+      }),
+    });
   });
 });
 
